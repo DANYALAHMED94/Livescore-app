@@ -62,43 +62,43 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // FutureBuilder(
-                //   future: leagueInformation(),
-                //   builder: (context, snapshot) {
-                //     if(snapshot.connectionState == ConnectionState.waiting) {
-                //       return const Center(
-                //         child: CircularProgressIndicator(
-                //           color: Colors.white,
-                //           backgroundColor: Colors.grey,
-                //         ),
-                //       );
-                //     }
-                //     else if(snapshot.hasData) {
-                //
-                //       var mapData = jsonDecode(snapshot.data.toString());
-                //       var response = mapData["response"];
-                //
-                //       return SizedBox(
-                //         height: MediaQuery.of(context).size.height*2,
-                //         child: ListView.builder(
-                //           itemBuilder: (context, index) {
-                //             return FavTeamList(
-                //               response[index]["league"]["name"].toString(),
-                //               response[index]["league"]["logo"].toString(),
-                //             );
-                //           },
-                //           itemCount: response.length,
-                //           physics: const BouncingScrollPhysics(),
-                //         ),
-                //       );
-                //     }
-                //     else{
-                //       return const Text("Sorry Their is an Server Issue Occurring",
-                //         style: TextStyle(fontSize: 12, color: Colors.white),
-                //       );
-                //     }
-                //   },
-                // ),
+                FutureBuilder(
+                  future: leagueInformation(),
+                  builder: (context, snapshot) {
+                    if(snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          backgroundColor: Colors.grey,
+                        ),
+                      );
+                    }
+                    else if(snapshot.hasData) {
+
+                      var mapData = jsonDecode(snapshot.data.toString());
+                      var response = mapData["response"];
+
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height*2,
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            return FavTeamList(
+                              response[index]["league"]["name"].toString(),
+                              response[index]["league"]["logo"].toString(),
+                            );
+                          },
+                          itemCount: response.length,
+                          physics: const BouncingScrollPhysics(),
+                        ),
+                      );
+                    }
+                    else{
+                      return const Text("Sorry Their is an Server Issue Occurring",
+                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      );
+                    }
+                  },
+                ),
 
                 const SizedBox(height: 16),
 
