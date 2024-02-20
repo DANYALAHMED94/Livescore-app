@@ -1,7 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'FavouriteScreen/FootballFavoriteBody/Teams/TeamInfo/TeamInfoMainScreen.dart';
+import '../../FavouriteScreen/FootballFavoriteBody/Teams/TeamInfo/TeamInfoMainScreen.dart';
 import 'package:http/http.dart' as http;
 
 class FootballSearchIcon extends StatelessWidget {

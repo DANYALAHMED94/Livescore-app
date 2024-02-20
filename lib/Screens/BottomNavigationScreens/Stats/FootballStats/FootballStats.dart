@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../../../ModelClasses/LeagueModel.dart';
 import '../../../setting_screen.dart';
 import '../../MatchesMenusSelections.dart';
-import '../../FootBallSearchIcon.dart';
+import '../../DashBoards/SearchIcons/FootBallSearchIcon.dart';
 import 'FootBallSubStats/FootballMainStatsSubScreen.dart';
 
 class FootBallStats extends StatelessWidget {

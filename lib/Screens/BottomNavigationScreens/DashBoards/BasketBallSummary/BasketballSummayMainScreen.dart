@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
+import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/BasketBallSummary/SubScreenSummary/BasketBallSummary.dart';
+import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/BasketBallSummary/SubScreenSummary/BasketballLineUps.dart';
+import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/BasketBallSummary/SubScreenSummary/BasketballStandings.dart';
+import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/BasketBallSummary/SubScreenSummary/BasketballStats.dart';
 import '../../NewsScreens/TabScreens/HotPage.dart';
-import 'DetailsTabBodies/FootBallDetailed/FootBallLineUps.dart';
-import 'DetailsTabBodies/FootBallDetailed/FootballStanding.dart';
-import 'DetailsTabBodies/FootBallDetailed/FootballStats.dart';
-import 'DetailsTabBodies/FootBallDetailed/FootballSummary.dart';
 
-class MatchDetails extends StatefulWidget {
+class BasketballSummaryMainScreen extends StatefulWidget {
   bool isFootball;
   String team1Name,
       team1Logo,
@@ -17,7 +17,7 @@ class MatchDetails extends StatefulWidget {
       teamsStatus,
       fixtureId;
 
-  MatchDetails(
+  BasketballSummaryMainScreen(
       this.isFootball,
       this.team1Name,
       this.team1Logo,
@@ -30,10 +30,10 @@ class MatchDetails extends StatefulWidget {
       );
 
   @override
-  State<MatchDetails> createState() => _MatchDetailsState();
+  State<BasketballSummaryMainScreen> createState() => _BasketballSummaryMainScreenState();
 }
 
-class _MatchDetailsState extends State<MatchDetails> {
+class _BasketballSummaryMainScreenState extends State<BasketballSummaryMainScreen> {
 
   int selectedTab = 0;
 
@@ -49,10 +49,10 @@ class _MatchDetailsState extends State<MatchDetails> {
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
     List<Widget> tabScreensList = [
-      F_Summary(),
-      F_Stats(fixtureId: widget.fixtureId),
-      F_LineUps(isShowGround: widget.isFootball, fixtureId: widget.fixtureId,),
-      F_Standing(isShow: true,leagueId: "39"),
+      BasketBallSummary(),
+      BasketballStats(fixtureId: widget.fixtureId),
+      BasketballLineUps(isShowGround: widget.isFootball, fixtureId: widget.fixtureId,),
+       BasketballStandings(isShow: true,leagueId: "39"),
       const HotPage(),
     ];
     return Scaffold(
@@ -123,13 +123,13 @@ class _MatchDetailsState extends State<MatchDetails> {
                             height: 50,
                             width: 50,
                             decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                    widget.team1Logo
-                                  ),
-                                  fit: BoxFit.fill,
-                                filterQuality: FilterQuality.high
-                              )
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        widget.team1Logo
+                                    ),
+                                    fit: BoxFit.fill,
+                                    filterQuality: FilterQuality.high
+                                )
                             ),
                           ),
                           const SizedBox(height: 10,),
@@ -176,7 +176,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                      widget.team2Logo
+                                        widget.team2Logo
                                     ),
                                     fit: BoxFit.fill,
                                     filterQuality: FilterQuality.high

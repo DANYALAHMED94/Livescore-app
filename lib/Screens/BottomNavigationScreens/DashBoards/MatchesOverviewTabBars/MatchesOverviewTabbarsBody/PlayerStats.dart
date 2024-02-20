@@ -8,7 +8,6 @@ import 'Player&TeamTabsScreens/AllScores.dart';
 import 'Player&TeamTabsScreens/GoalsScreen.dart';
 import 'package:http/http.dart' as http;
 
-
 class PlayerStatsScreen extends StatelessWidget {
   int selection;
   String leagueId;
