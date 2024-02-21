@@ -8,9 +8,8 @@ import 'package:live_score_app/Screens/ModelClasses/SubstitudesModel.dart';
 import '../../../../../../Widgets/GroundPlayerItems.dart';
 
 class BasketballLineUps extends StatelessWidget {
-  bool isShowGround;
-  String fixtureId;
-  BasketballLineUps({super.key, required this.isShowGround, required this.fixtureId});
+
+  BasketballLineUps({super.key});
 
   List<Substitute> substitutes1List = [];
   List<InjuriesModel> injuries1List = [];
@@ -50,288 +49,10 @@ class BasketballLineUps extends StatelessWidget {
 
           return SingleChildScrollView(
             child: SizedBox(
-              height: isShowGround?mediaQuery.size.height*1.85:mediaQuery.size.height,
+              height: mediaQuery.size.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  isShowGround?Container(
-                    height: mediaQuery.size.height*0.85,
-                    width: mediaQuery.size.width,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 5
-                    ),
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("assets/images/e_ground.png"),
-                            fit: BoxFit.fill
-                        )
-                    ),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Positioned(
-                            top: mediaQuery.size.height*0.035,
-                            right: 0,
-                            left: 0,
-                            child: GroundPlayerItems(
-                              value: 19,
-                              name: "Rafiq",
-                              shirt: "assets/images/white_group.png",
-                              isWhite: false,
-                            )
-                        ),
-                        Positioned(
-                            top: mediaQuery.size.height*0.12,
-                            left: mediaQuery.size.width*0.1,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            top: mediaQuery.size.height*0.12,
-                            left: mediaQuery.size.width*0.3,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            top: mediaQuery.size.height*0.12,
-                            right: mediaQuery.size.width*0.1,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            top: mediaQuery.size.height*0.12,
-                            right: mediaQuery.size.width*0.3,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            top: mediaQuery.size.height*0.24,
-                            left: mediaQuery.size.width*0.18,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            top: mediaQuery.size.height*0.24,
-                            left: mediaQuery.size.width*0.4,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            top: mediaQuery.size.height*0.24,
-                            left: mediaQuery.size.width*0.65,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            top: mediaQuery.size.height*0.33,
-                            right: mediaQuery.size.width*0.12,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            top: mediaQuery.size.height*0.33,
-                            right: 0,
-                            left: 0,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            top: mediaQuery.size.height*0.33,
-                            left: mediaQuery.size.width*0.12,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                          top: mediaQuery.size.height*0.37,
-                          right: mediaQuery.size.width*0.38,
-                          child: Container(
-                            height: 25,
-                            width: 25,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                image: const DecorationImage(
-                                    image: AssetImage("assets/images/bootball.png"),
-                                    fit: BoxFit.fill
-                                )
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: mediaQuery.size.height*0.37,
-                          right: mediaQuery.size.width*0.34,
-                          child: Container(
-                            height: 25,
-                            width: 25,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                image: const DecorationImage(
-                                    image: AssetImage("assets/images/bootball.png"),
-                                    fit: BoxFit.fill
-                                )
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                            bottom: mediaQuery.size.height*0.03,
-                            right: 0,
-                            left: 0,
-                            child: GroundPlayerItems(
-                              value: 19,
-                              name: "Rafiq",
-                              shirt: "assets/images/white_group.png",
-                              isWhite: false,
-                            )
-                        ),
-
-                        Positioned(
-                            bottom: mediaQuery.size.height*0.12,
-                            left: mediaQuery.size.width*0.1,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/red_group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            bottom: mediaQuery.size.height*0.12,
-                            left: mediaQuery.size.width*0.3,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/red_group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            bottom: mediaQuery.size.height*0.12,
-                            right: mediaQuery.size.width*0.1,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/red_group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            bottom: mediaQuery.size.height*0.12,
-                            right: mediaQuery.size.width*0.3,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/red_group.png",
-                              isWhite: true,
-                            )
-                        ),
-
-                        Positioned(
-                            bottom: mediaQuery.size.height*0.24,
-                            left: mediaQuery.size.width*0.18,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/red_group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            bottom: mediaQuery.size.height*0.24,
-                            left: mediaQuery.size.width*0.4,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/red_group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            bottom: mediaQuery.size.height*0.24,
-                            left: mediaQuery.size.width*0.65,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/red_group.png",
-                              isWhite: true,
-                            )
-                        ),
-
-                        Positioned(
-                            bottom: mediaQuery.size.height*0.33,
-                            right: mediaQuery.size.width*0.12,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/red_group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            bottom: mediaQuery.size.height*0.33,
-                            right: 0,
-                            left: 0,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/red_group.png",
-                              isWhite: true,
-                            )
-                        ),
-                        Positioned(
-                            bottom: mediaQuery.size.height*0.33,
-                            left: mediaQuery.size.width*0.12,
-                            child: GroundPlayerItems(
-                              value: 1,
-                              name: "Rafiq",
-                              shirt: "assets/images/red_group.png",
-                              isWhite: true,
-                            )
-                        ),
-
-                      ],
-                    ),
-                  ):SizedBox(),
                   Container(
                     height: mediaQuery.size.height*0.42,
                     width: mediaQuery.size.width,
@@ -496,7 +217,7 @@ class BasketballLineUps extends StatelessWidget {
     };
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/fixtures/lineups?fixture=${fixtureId.toString()}')
+        Uri.parse('https://v3.football.api-sports.io/fixtures/lineups}')
     );
 
     request.headers.addAll(headers);
@@ -521,7 +242,7 @@ class BasketballLineUps extends StatelessWidget {
     };
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/injuries?fixture=${fixtureId.toString()}')
+        Uri.parse('https://v3.football.api-sports.io/injuries')
     );
 
     request.headers.addAll(headers);

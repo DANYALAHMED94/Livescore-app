@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/BasketBallSummary/BasketballSummayMainScreen.dart';
+import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/Basketball-League-Overview/BasketballLeagueOverviewMain.dart';
 import '../../../MatchesOverviewTabBars/MatchesOverviewTabBars.dart';
 
 class BasketBallFixture extends StatelessWidget {
@@ -55,54 +57,50 @@ class BasketBallFixture extends StatelessWidget {
                             response[index]["league"]["logo"].toString()
                         ),
                       ),
-                      title: Text(response[index]["league"]["name"].toString(), style: TextStyle(color: Colors.white,
-                      ),
+                      title: Text(
+                        response[index]["league"]["name"].toString(),
+                        style: TextStyle(color: Colors.white,),
                       ),
                     ),
                     const SizedBox(height: 5,),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MatchesOverviewTabBars(isFootball: false),));
-                      },
-                      child: Container(
-                        width: mediaQuery.size.width,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 7
-                        ),
-                        decoration: BoxDecoration(
-                            color: const Color(0xff161616),
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: Center(
-                          child: ListTile(
-                            dense: true,
-                            leading: SizedBox(
-                              height: 50,
-                              width: mediaQuery.size.width*0.18,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(DateFormat("HH:mm a").format(DateTime.parse(response[index]["date"].toString())), style: TextStyle(color:  Color(0xff9B8BFF)),),
-                                      Text(response[index]["status"]["short"].toString(), style: TextStyle(color: Color(0xff9B8BFF)),),
-                                    ],
-                                  ),
-                                  Container(
-                                    height: 50,
-                                    width: 2,
-                                    color: Colors.grey,
-                                  )
-                                ],
-                              ),
+                    Container(
+                      width: mediaQuery.size.width,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 7
+                      ),
+                      decoration: BoxDecoration(
+                          color: const Color(0xff161616),
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Center(
+                        child: ListTile(
+                          dense: true,
+                          leading: SizedBox(
+                            height: 50,
+                            width: mediaQuery.size.width*0.18,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(DateFormat("HH:mm a").format(DateTime.parse(response[index]["date"].toString())), style: TextStyle(color:  Color(0xff9B8BFF)),),
+                                    Text(response[index]["status"]["short"].toString(), style: TextStyle(color: Color(0xff9B8BFF)),),
+                                  ],
+                                ),
+                                Container(
+                                  height: 50,
+                                  width: 2,
+                                  color: Colors.grey,
+                                )
+                              ],
                             ),
-                            minLeadingWidth: 50,
-                            title: Text(response[index]["teams"]["home"]["name"].toString(), style: TextStyle(color: Colors.white),),
-                            subtitle: Text(response[index]["teams"]["away"]["name"].toString(), style: TextStyle(color: Colors.white),),
-                            trailing: Text(DateFormat("HH:mm a").format(DateTime.parse(response[index]["date"].toString())), style: TextStyle(color: Colors.grey, fontSize: 12),),
                           ),
+                          minLeadingWidth: 50,
+                          title: Text(response[index]["teams"]["home"]["name"].toString(), style: TextStyle(color: Colors.white),),
+                          subtitle: Text(response[index]["teams"]["away"]["name"].toString(), style: TextStyle(color: Colors.white),),
+                          trailing: Text(DateFormat("HH:mm a").format(DateTime.parse(response[index]["date"].toString())), style: TextStyle(color: Colors.grey, fontSize: 12),),
                         ),
                       ),
                     )

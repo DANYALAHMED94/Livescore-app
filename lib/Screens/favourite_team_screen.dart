@@ -7,7 +7,7 @@ class FavouriteTeamScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff101010),
+      backgroundColor: const Color(0xff101010),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -92,7 +92,6 @@ class FavouriteTeamScreen extends StatelessWidget {
                     }
                   },
               ),
-
             ],
           ),
         ),

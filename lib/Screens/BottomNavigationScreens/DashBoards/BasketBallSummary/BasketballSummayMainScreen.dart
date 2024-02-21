@@ -7,6 +7,9 @@ import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/Basket
 import '../../NewsScreens/TabScreens/HotPage.dart';
 
 class BasketballSummaryMainScreen extends StatefulWidget {
+
+  String leagueId;
+
   bool isFootball;
   String team1Name,
       team1Logo,
@@ -15,7 +18,7 @@ class BasketballSummaryMainScreen extends StatefulWidget {
       team1Score,
       team2Score,
       teamsStatus,
-      fixtureId;
+      gameId;
 
   BasketballSummaryMainScreen(
       this.isFootball,
@@ -26,7 +29,8 @@ class BasketballSummaryMainScreen extends StatefulWidget {
       this.team1Score,
       this.team2Score,
       this.teamsStatus,
-      this.fixtureId
+      this.leagueId,
+      this.gameId
       );
 
   @override
@@ -50,9 +54,9 @@ class _BasketballSummaryMainScreenState extends State<BasketballSummaryMainScree
     var mediaQuery = MediaQuery.of(context);
     List<Widget> tabScreensList = [
       BasketBallSummary(),
-      BasketballStats(fixtureId: widget.fixtureId),
-      BasketballLineUps(isShowGround: widget.isFootball, fixtureId: widget.fixtureId,),
-       BasketballStandings(isShow: true,leagueId: "39"),
+      BasketballStats(gameId: widget.gameId),
+      BasketballLineUps(),
+      B_Standing(isShow: false, leagueId: widget.leagueId),
       const HotPage(),
     ];
     return Scaffold(
@@ -116,7 +120,7 @@ class _BasketballSummaryMainScreenState extends State<BasketballSummaryMainScree
                   children: [
                     SizedBox(
                       height: 90,
-                      width: mediaQuery.size.width*0.3,
+                      width: mediaQuery.size.width*0.25,
                       child: Column(
                         children: [
                           Container(
@@ -167,7 +171,7 @@ class _BasketballSummaryMainScreenState extends State<BasketballSummaryMainScree
                     ),
                     SizedBox(
                       height: 90,
-                      width: mediaQuery.size.width*0.3,
+                      width: mediaQuery.size.width*0.25,
                       child: Column(
                         children: [
                           Container(

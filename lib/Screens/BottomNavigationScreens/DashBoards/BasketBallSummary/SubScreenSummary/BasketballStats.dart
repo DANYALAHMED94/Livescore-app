@@ -5,8 +5,9 @@ import 'package:live_score_app/Screens/ModelClasses/FootballStatistics.dart';
 
 class BasketballStats extends StatelessWidget {
 
-  String fixtureId;
-  BasketballStats({super.key, required this.fixtureId});
+  String gameId;
+
+  BasketballStats({super.key, required this.gameId});
 
   // List<StatsLinearProgressModel> quarter1 = [
   //   StatsLinearProgressModel(0.59, "Field Goals Attempted"),
@@ -49,31 +50,7 @@ class BasketballStats extends StatelessWidget {
               var mapData = jsonDecode(snapshot.data.toString());
               var response = mapData["response"];
 
-              // return Text(response[0].toString(), style: TextStyle(fontSize: 12, color: Colors.white),);
-
-              var statisticsInfo1 = response[0]["statistics"];
-              var statisticsInfo2 = response[1]["statistics"];
-
-              for(var statsInfo in statisticsInfo1) {
-                statisticsList1
-                    .add(
-                    FootballStatistics(
-                        statsInfo["value"].toString(),
-                        statsInfo["type"].toString()
-                    )
-                );
-              }
-
-              for(var statsInfo in statisticsInfo2) {
-                statisticsList2
-                    .add(
-                    FootballStatistics(
-                        statsInfo["value"].toString(),
-                        statsInfo["type"].toString()
-                    )
-                );
-              }
-
+              // return Text(response.toString(), style: const TextStyle(fontSize: 12, color: Colors.white),);
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -102,12 +79,14 @@ class BasketballStats extends StatelessWidget {
                       width: mediaQuery.size.width,
                       child: ListView.builder(itemBuilder: (context, index) {
                         return linearProgressContainerBuilder(
-                          statisticsList1[index].value.toString(),
-                          statisticsList2[index].value.toString(),
-                          statisticsList2[index].type.toString(),
+                            response[0]["scores"]["home"]["quarter_${index+1}"].toString(),
+                            response[0]["scores"]["away"]["quarter_${index+1}"].toString(),
+                            "QUARTER ${index+1}",
+                            // response[0]["scores"]["home"]["total"].toString(),
+                            // response[0]["scores"]["away"]["total"].toString(),
                         );
                       },
-                        itemCount: statisticsList1.length,
+                        itemCount: 4,
                         physics: NeverScrollableScrollPhysics(),
                       )),
                   // const Text("2st Quarter", style: TextStyle(
@@ -175,16 +154,12 @@ class BasketballStats extends StatelessWidget {
   Widget linearProgressContainerBuilder(
       String team1Value,
       String team2Value,
-      String type
+      String type,
       )
   {
 
-    if(team1Value.contains("%")) {
-      team1Value.substring(0, team1Value.length-1);
-    }
-    if(team2Value.contains("%")) {
-      team2Value.substring(0, team2Value.length-1);
-    }
+    int team1Score = int.parse(team1Value);
+    int team2Score = int.parse(team2Value);
 
     return Container(
       height: 60,
@@ -208,16 +183,21 @@ class BasketballStats extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${team1Value.toString()}%", style: const TextStyle(
+              Text(team1Score.toString(), style: const TextStyle(
                   color: Colors.white,
+                  fontWeight: FontWeight.bold,
                   fontSize: 15
               ),),
-              Text(type.toString(), style: const TextStyle(
+              Text(type, style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 15
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
               ),),
-              Text("${team1Value.toString()}%", style: const TextStyle(
+              Text(
+                team2Value.toString(),
+                style: const TextStyle(
                   color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   fontSize: 15
               ),),
             ],
@@ -231,7 +211,7 @@ class BasketballStats extends StatelessWidget {
             child: LinearProgressIndicator(
               backgroundColor: Colors.white,
               valueColor: AlwaysStoppedAnimation<Color>(const Color(0xff9B8BFF),),
-              value: 0.5,
+              value: double.parse((team1Score+team2Score).toString())/100,
             ),
           ),
         ],
@@ -245,11 +225,13 @@ class BasketballStats extends StatelessWidget {
 
     var headers = {
       'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'https://api-football-v1.p.rapidapi.com/v3/fixtures/statistics'
+      'x-rapidapi-host': 'https://api-basketball.p.rapidapi.com/games'
     };
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixtureId.toString()}')
+        Uri.parse(
+          "https://v1.basketball.api-sports.io/games?id=$gameId"
+        )
     );
 
     request.headers.addAll(headers);

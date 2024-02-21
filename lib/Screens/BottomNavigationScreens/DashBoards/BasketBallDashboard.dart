@@ -1,14 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../Widgets/CompleteList.dart';
+import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/BasketBallSummary/BasketballSummayMainScreen.dart';
+import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/Basketball-League-Overview/BasketballLeagueOverviewMain.dart';
 import '../../setting_screen.dart';
-import '../FavouriteScreen/FavouriteScreen.dart';
 import '../MatchesMenusSelections.dart';
 import 'SearchIcons/BasketBallSearchIcon.dart';
-import 'MatchesDetailed/MatchDetailes.dart';
-import 'MatchesOverviewTabBars/MatchesOverviewTabBars.dart';
 import 'package:http/http.dart' as http;
 
 class BasketBallDashBoardScreen extends StatefulWidget {
@@ -19,6 +16,7 @@ class BasketBallDashBoardScreen extends StatefulWidget {
 }
 
 class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
+
   int selectedDateTime = 0;
 
   int selectedImageLevel=0;
@@ -41,7 +39,9 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
           IconButton(onPressed: (){
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) =>
-                const BasketBallSearchIcon(),));
+                const BasketBallSearchIcon(),
+                )
+            );
           }, icon: const Icon(Icons.search, size: 28, color: Colors.white,)),
           Padding(
             padding: const EdgeInsets.only(
@@ -52,7 +52,9 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          SettingScreen()));
+                          SettingScreen()
+                  )
+              );
             }, icon: const Icon(Icons.dehaze, size: 28,color: Colors.white,)),
           )
         ],
@@ -316,9 +318,13 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      MatchesOverviewTabBars(
-                                                          isFootball: true
-                                                      ),
+                                                      BasketballLeagueOverviewMain(
+                                                          isFootball: false,
+                                                          leagueID: response[index]["league"]["id"].toString(),
+                                                          name: response[index]["league"]["name"].toString(),
+                                                          country: response[index]["country"]["name"].toString(),
+                                                          logo: response[index]["league"]["logo"].toString()
+                                                      )
                                                 )
                                             );
                                           },
@@ -344,7 +350,7 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
                                                 .push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) => MatchDetails(
+                                                    builder: (context) => BasketballSummaryMainScreen(
                                                       true,
                                                       response[index]["teams"]["home"]["name"].toString(),
                                                       response[index]["teams"]["home"]["logo"].toString(),
@@ -353,6 +359,7 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
                                                       response[index]["scores"]["home"]["total"].toString(),
                                                       response[index]["scores"]["away"]["total"].toString(),
                                                       response[index]["status"]["short"].toString(),
+                                                      response[index]["league"]["id"].toString(),
                                                       response[index]["id"].toString(),
                                                     )
                                                 )

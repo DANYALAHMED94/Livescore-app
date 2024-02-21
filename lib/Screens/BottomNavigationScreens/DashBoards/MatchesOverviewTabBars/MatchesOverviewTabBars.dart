@@ -6,8 +6,18 @@ import 'MatchesOverviewTabbarsBody/Overview.dart';
 import 'MatchesOverviewTabbarsBody/PlayerStats.dart';
 
 class MatchesOverviewTabBars extends StatefulWidget {
+
   bool isFootball;
-  MatchesOverviewTabBars({super.key, required this.isFootball});
+
+  String name, country, logo;
+
+  MatchesOverviewTabBars({
+    super.key,
+    required this.isFootball,
+    required this.name,
+    required this.country,
+    required this.logo
+  });
 
   @override
   State<MatchesOverviewTabBars> createState() => _MatchesOverviewTabBarsState();

@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
-import '../../../DashBoards/MatchesDetailed/DetailsTabBodies/FootBallDetailed/FootballStanding.dart';
+import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/BasketBallSummary/SubScreenSummary/BasketballStandings.dart';
 import '../../../DashBoards/MatchesOverviewTabBars/MatchesOverviewTabbarsBody/PlayerStats.dart';
 
 class BasketBallMainSubStatsScreens extends StatefulWidget {
-  const BasketBallMainSubStatsScreens({super.key});
+
+  String name, country, logo, leagueId;
+
+  BasketBallMainSubStatsScreens({
+    required this.logo,
+    required this.name,
+    required this.country,
+    required this.leagueId
+  });
 
   @override
   State<BasketBallMainSubStatsScreens> createState() => _BasketBallMainSubStatsScreensState();
@@ -39,8 +47,14 @@ class _BasketBallMainSubStatsScreensState extends State<BasketBallMainSubStatsSc
     var mediaQuery = MediaQuery.of(context);
 
     List<Widget> tabScreensList = [
-      F_Standing(isShow: false, leagueId: "39"),
-      PlayerStatsScreen(selection: boxSelected2, leagueId: "39"),
+      B_Standing(
+          isShow: false,
+          leagueId: widget.leagueId
+      ),
+      PlayerStatsScreen(
+          selection: boxSelected2,
+          leagueId: widget.leagueId
+      ),
     ];
 
     return Scaffold(
@@ -63,12 +77,14 @@ class _BasketBallMainSubStatsScreensState extends State<BasketBallMainSubStatsSc
           enabled: false,
           leading: CircleAvatar(
             backgroundColor: Colors.transparent,
-            backgroundImage: AssetImage("assets/images/LaLiga.png"),
+            backgroundImage: NetworkImage(
+              widget.logo
+            ),
             radius: 16,
           ),
           // trailing: Icon(Icons.arrow_forward_ios, color: Colors.white,),
-          subtitle: Text("Spain", style: TextStyle(fontSize: 12, color: Colors.white),),
-          title: Text("Laliga", style: TextStyle(fontSize: 15, color: Colors.white),),
+          subtitle: Text(widget.country, style: TextStyle(fontSize: 12, color: Colors.white),),
+          title: Text(widget.name, style: TextStyle(fontSize: 15, color: Colors.white),),
           dense: true,
           minLeadingWidth: 1,
         ),

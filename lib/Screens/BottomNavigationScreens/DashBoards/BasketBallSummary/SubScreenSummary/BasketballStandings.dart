@@ -2,17 +2,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class BasketballStandings extends StatefulWidget {
-
+class B_Standing extends StatefulWidget {
   bool isShow;
   String leagueId;
-  BasketballStandings({super.key, required this.isShow, required this.leagueId});
+  B_Standing({super.key, required this.isShow, required this.leagueId});
 
   @override
-  State<BasketballStandings> createState() => _BasketballStandingsState();
+  State<B_Standing> createState() => _B_StandingState();
 }
 
-class _BasketballStandingsState extends State<BasketballStandings> {
+class _B_StandingState extends State<B_Standing> {
   int selectedMain = 1;
 
   int selectedSub = 0;
@@ -46,9 +45,9 @@ class _BasketballStandingsState extends State<BasketballStandings> {
 
           var mapData = jsonDecode(snapshot.data.toString());
           var response = mapData["response"];
-          var standingInfo = response[0]["league"]["standings"][0];
+          var standingInfo = response[0];
 
-          // return Text(standingInfo.toString(), style: TextStyle(fontSize: 12, color: Colors.white),);
+          // return Text(standingInfo[0].toString(), style: TextStyle(fontSize: 12, color: Colors.white),);
 
           return SingleChildScrollView(
             child: SizedBox(
@@ -214,9 +213,9 @@ class _BasketballStandingsState extends State<BasketballStandings> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const Text("P", style: TextStyle(color: Colors.white,fontSize: 15),),
-                                    const Text("GD", style: TextStyle(color: Colors.white,fontSize: 15),),
-                                    const Text("PTS", style: TextStyle(color: Colors.white,fontSize: 15),),
+                                    Text("W", style: TextStyle(color: Colors.white,fontSize: 15),),
+                                    Text("L", style: TextStyle(color: Colors.white,fontSize: 15),),
+                                    Text("P", style: TextStyle(color: Colors.white,fontSize: 15),),
                                   ],
                                 )
                             ),
@@ -230,9 +229,10 @@ class _BasketballStandingsState extends State<BasketballStandings> {
                               context,
                               standingInfo[index]["team"]["name"].toString(),
                               standingInfo[index]["team"]["logo"].toString(),
-                              standingInfo[index]["points"].toString(),
-                              standingInfo[index]["goalsDiff"].toString(),
-                              standingInfo[index]["rank"].toString(),
+                              standingInfo[index]["games"]["win"]["total"].toString(),
+                              standingInfo[index]["games"]["lose"]["total"].toString(),
+                              standingInfo[index]["games"]["played"].toString(),
+                              standingInfo[index]["position"].toString(),
                               standingInfo[index]["form"].toString(),
 
                             );
@@ -264,9 +264,10 @@ class _BasketballStandingsState extends State<BasketballStandings> {
       BuildContext context,
       String teamName,
       String teamLogo,
-      String gdValue,
-      String pValue,
-      String ptsValue,
+      String winValue,
+      String lossValue,
+      String playerValue,
+      String position,
       String form
       )
   {
@@ -299,7 +300,7 @@ class _BasketballStandingsState extends State<BasketballStandings> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("${index+1}", style: const TextStyle(color: Colors.white,fontSize: 15),),
+            child: Text(position.toString(), style: const TextStyle(color: Colors.white,fontSize: 15),),
           ),
           selectedSub==1 ? SizedBox(
             width: mediaQuery.size.width*0.8,
@@ -319,9 +320,9 @@ class _BasketballStandingsState extends State<BasketballStandings> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(pValue.toString(), style: TextStyle(color: Colors.white,fontSize: 12),),
-                    Text(gdValue.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
-                    Text(ptsValue.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
+                    Text(winValue.toString(), style: TextStyle(color: Colors.white,fontSize: 12),),
+                    Text(lossValue.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
+                    Text(playerValue.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
                   ],
                 ),
               ),
@@ -432,11 +433,11 @@ class _BasketballStandingsState extends State<BasketballStandings> {
 
     var headers = {
       'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'https://api-football-v1.p.rapidapi.com/v3/standings'
+      'x-rapidapi-host': 'https://api-basketball.p.rapidapi.com/standings'
     };
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/standings?league=${widget.leagueId}&season=2021')
+        Uri.parse('https://v1.basketball.api-sports.io/standings?league=${widget.leagueId}&season=2021-2022')
     );
 
     request.headers.addAll(headers);

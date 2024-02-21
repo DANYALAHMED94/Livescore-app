@@ -53,7 +53,14 @@ class MatchesFixtures extends StatelessWidget {
                         const SizedBox(height: 5,),
                         GestureDetector(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => MatchesOverviewTabBars(isFootball: false),));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => MatchesOverviewTabBars(
+                                isFootball: true,
+                              logo: response[index]["league"]["logo"].toString(),
+                              country: response[index]["country"]["name"].toString(),
+                              name: response[index]["league"]["name"].toString(),
+                            ),
+                            )
+                            );
                           },
                           child: Container(
                             width: mediaQuery.size.width,

@@ -311,7 +311,10 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         MatchesOverviewTabBars(
-                                                            isFootball: true
+                                                            isFootball: true,
+                                                          logo: response[index]["league"]["logo"].toString(),
+                                                          country: response[index]["country"]["name"].toString(),
+                                                          name: response[index]["league"]["name"].toString(),
                                                         ),
                                                   )
                                               );
