@@ -126,55 +126,7 @@ class AllScoresListedContainers extends StatelessWidget {
           ),
 
           ListTile(
-            onTap: (){
-              if(outerIndex == 0) {
-                Navigator
-                    .push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GoalsScreen(
-                          selectedIndex: outerIndex+1,
-                          leagueID: leagueID),
-                    )
-                );
-              }
-              else if(outerIndex == 1) {
-                Navigator
-                    .push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TopAssets(
-                          selectedIndex: outerIndex+1,
-                          leagueID: leagueID
-                      )
-                    )
-                );
-              }
-              else if(outerIndex == 1) {
-                Navigator
-                    .push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RedCardsScreen(
-                          selectedIndex: outerIndex+1,
-                          leagueID: leagueID
-                      )
-                    )
-                );
-              }
-              else{
-                Navigator
-                    .push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => YellowCardsScreen(
-                          selectedIndex: outerIndex+1,
-                          leagueID: leagueID
-                      )
-                    )
-                );
-              }
-            },
+            onTap: (){},
             dense: true,
             title: Center(child: Text("See All", style: TextStyle(fontSize: 15, color: Colors.white))),
           ),

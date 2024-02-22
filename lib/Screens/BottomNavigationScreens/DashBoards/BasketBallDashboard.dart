@@ -235,7 +235,7 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
             bottom: 50,
             child: SingleChildScrollView(
               child: SizedBox(
-                height: mediaQuery.size.height*1.13,
+                height: mediaQuery.size.height*1.15,
                 child: Column(
                   children: [
                     FutureBuilder(

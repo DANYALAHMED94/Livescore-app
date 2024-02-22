@@ -54,10 +54,11 @@ class MatchesFixtures extends StatelessWidget {
                         GestureDetector(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context) => MatchesOverviewTabBars(
-                                isFootball: true,
+                              isFootball: true,
                               logo: response[index]["league"]["logo"].toString(),
                               country: response[index]["country"]["name"].toString(),
                               name: response[index]["league"]["name"].toString(),
+                              leagueID: response[index]["league"]["id"].toString(),
                             ),
                             )
                             );

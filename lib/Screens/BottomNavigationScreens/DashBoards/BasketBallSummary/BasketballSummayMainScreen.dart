@@ -44,7 +44,7 @@ class _BasketballSummaryMainScreenState extends State<BasketballSummaryMainScree
   List<String> tabMenuList = [
     "SUMMARY",
     "STATS",
-    "LINEUPS",
+    // "LINEUPS",
     "STANDINGS",
     "NEWS"
   ];
@@ -55,7 +55,7 @@ class _BasketballSummaryMainScreenState extends State<BasketballSummaryMainScree
     List<Widget> tabScreensList = [
       BasketBallSummary(),
       BasketballStats(gameId: widget.gameId),
-      BasketballLineUps(),
+      // BasketballLineUps(),
       B_Standing(isShow: false, leagueId: widget.leagueId),
       const HotPage(),
     ];

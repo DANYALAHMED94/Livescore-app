@@ -311,10 +311,11 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         MatchesOverviewTabBars(
-                                                            isFootball: true,
+                                                          isFootball: true,
                                                           logo: response[index]["league"]["logo"].toString(),
-                                                          country: response[index]["country"]["name"].toString(),
+                                                          country: response[index]["league"]["country"].toString(),
                                                           name: response[index]["league"]["name"].toString(),
+                                                          leagueID: response[index]["league"]["id"].toString(),
                                                         ),
                                                   )
                                               );
@@ -328,7 +329,7 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                                   response[index]["league"]["logo"].toString()
                                               ),
                                             ),
-                                            title: Text(response[index]["league"]["name"].toString(), style: TextStyle(color: Colors.white,
+                                            title: Text(response[index]["league"]["name"].toString(), style: const TextStyle(color: Colors.white,
                                             ),),
                                           ),
                                           const SizedBox(height: 5,),
@@ -497,97 +498,6 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                           }
                         },
                     ),
-                    // Expanded(
-                    //     child: Column(
-                    //       children: [
-                    //         SizedBox(
-                    //           height: 60,
-                    //           child: Center(
-                    //             child: ListTile(
-                    //               onTap: (){
-                    //                 Navigator.push(context,
-                    //                     MaterialPageRoute(
-                    //                         builder: (context) =>
-                    //                             MatchesOverviewTabBars(isFootball: true,)
-                    //                     )
-                    //                 );
-                    //               },
-                    //               leading: const CircleAvatar(
-                    //                   radius: 20,
-                    //                   backgroundColor: Colors.transparent,
-                    //                   backgroundImage: AssetImage("assets/images/epl.png")
-                    //               ),
-                    //               trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 18,),
-                    //               subtitle: Text("England", style: TextStyle(fontSize: 12, color: Colors.white),),
-                    //               title: Text("EPL", style: TextStyle(fontSize: 15, color: Colors.white),),
-                    //               dense: true,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         Expanded(
-                    //             child: ListView.builder(itemBuilder: (context, index) {
-                    //               return GestureDetector(
-                    //                   onTap: (){
-                    //                     Navigator.push(context,
-                    //                         MaterialPageRoute(
-                    //                           builder: (context) =>
-                    //                               MatchDetails(isFootball: true),
-                    //                         )
-                    //                     );
-                    //                   },
-                    //                   child: ListContainersDashboard(index: index,));
-                    //             },
-                    //               itemExtent: 80,
-                    //               itemCount: 2,
-                    //               physics: const NeverScrollableScrollPhysics(),
-                    //             )
-                    //         ),
-                    //       ],
-                    //     )
-                    // ),
-                    // Expanded(
-                    //     child: Column(
-                    //       children: [
-                    //         ListTile(
-                    //           onTap: (){
-                    //             Navigator.push(context,
-                    //                 MaterialPageRoute(
-                    //                     builder: (context) =>
-                    //                         MatchesOverviewTabBars(isFootball: true,)
-                    //                 )
-                    //             );
-                    //           },
-                    //           leading: CircleAvatar(
-                    //               radius: 16,
-                    //               backgroundColor: Colors.transparent,
-                    //               backgroundImage: AssetImage("assets/images/LaLiga.png")
-                    //           ),
-                    //           trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 18,),
-                    //           subtitle: Text("Spain", style: TextStyle(fontSize: 15, color: Colors.white),),
-                    //           title: Text("Laliga", style: TextStyle(fontSize: 15, color: Colors.white),),
-                    //           dense: true,
-                    //         ),
-                    //         Expanded(
-                    //             child: ListView.builder(itemBuilder: (context, index) {
-                    //               return GestureDetector(
-                    //                   onTap: (){
-                    //                     Navigator.push(context,
-                    //                         MaterialPageRoute(
-                    //                           builder: (context) =>
-                    //                               MatchDetails(isFootball: true),
-                    //                         )
-                    //                     );
-                    //                   },
-                    //                   child: ListContainersDashboard(index: index,));
-                    //             },
-                    //               itemExtent: 80,
-                    //               itemCount: 2,
-                    //               physics: const NeverScrollableScrollPhysics(),
-                    //             )
-                    //         ),
-                    //       ],
-                    //     )
-                    // ),
                   ],
                 ),
               ),

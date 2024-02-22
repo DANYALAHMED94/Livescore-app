@@ -9,14 +9,15 @@ class MatchesOverviewTabBars extends StatefulWidget {
 
   bool isFootball;
 
-  String name, country, logo;
+  String name, country, logo, leagueID;
 
   MatchesOverviewTabBars({
     super.key,
     required this.isFootball,
     required this.name,
     required this.country,
-    required this.logo
+    required this.logo,
+    required this.leagueID
   });
 
   @override
@@ -60,10 +61,10 @@ class _MatchesOverviewTabBarsState extends State<MatchesOverviewTabBars> {
     var mediaQuery = MediaQuery.of(context);
 
     List<Widget> tabScreensList = [
-      OverViewBody(selection: boxSelected, isFootball: widget.isFootball),
-      F_Standing(isShow: false,leagueId: ""),
-      PlayerStatsScreen(selection: boxSelected2, leagueId: ""),
-      PlayerStatsScreen(selection: boxSelected3, leagueId: ""),
+      OverViewBody(selection: boxSelected, isFootball: widget.isFootball, leagueId: widget.leagueID),
+      F_Standing(isShow: false,leagueId: widget.leagueID),
+      PlayerStatsScreen(selection: boxSelected2, leagueId: widget.leagueID),
+      PlayerStatsScreen(selection: boxSelected3, leagueId: widget.leagueID),
       const HotPage(),
     ];
 
@@ -82,16 +83,18 @@ class _MatchesOverviewTabBarsState extends State<MatchesOverviewTabBars> {
             icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20,)),
         leadingWidth: 25,
         backgroundColor: Colors.black,
-        title: const ListTile(
+        title: ListTile(
           enabled: false,
           leading: CircleAvatar(
               radius: 16,
               backgroundColor: Colors.transparent,
-              backgroundImage: AssetImage("assets/images/LaLiga.png")
+              backgroundImage: NetworkImage(
+                widget.logo
+              )
           ),
           // trailing: Icon(Icons.arrow_forward_ios, color: Colors.white,),
-          subtitle: Text("Spain", style: TextStyle(fontSize: 12, color: Colors.white),),
-          title: Text("Laliga", style: TextStyle(fontSize: 15, color: Colors.white),),
+          subtitle: Text(widget.country, style: TextStyle(fontSize: 12, color: Colors.white),),
+          title: Text(widget.name, style: TextStyle(fontSize: 15, color: Colors.white),),
           dense: true,
           minLeadingWidth: 1,
         ),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -95,6 +94,7 @@ class FootballMatches extends StatelessWidget {
                                         logo: response[index]["league"]["logo"].toString(),
                                         country: response[index]["country"]["name"].toString(),
                                         name: response[index]["league"]["name"].toString(),
+                                        leagueID: response[index]["league"]["id"].toString(),
                                       ),
                                 )
                             );

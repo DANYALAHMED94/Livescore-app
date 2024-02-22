@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
 import '../../NewsScreens/TabScreens/HotPage.dart';
 import '../MatchesDetailed/DetailsTabBodies/FootBallDetailed/FootballStanding.dart';
-import '../MatchesOverviewTabBars/MatchesOverviewTabbarsBody/Overview.dart';
-import '../MatchesOverviewTabBars/MatchesOverviewTabbarsBody/PlayerStats.dart';
+// import '../MatchesOverviewTabBars/MatchesOverviewTabbarsBody/Overview.dart';
+import 'BasketBallLeagueOverviewSubScreens/BasketballOverviewBody.dart';
 
 class BasketballLeagueOverviewMain extends StatefulWidget {
+
   bool isFootball;
 
   String name, country, logo, leagueID;
@@ -28,20 +29,6 @@ class _BasketballLeagueOverviewMainState extends State<BasketballLeagueOverviewM
 
   int boxSelected = 1;
 
-  int boxSelected2 = 0;
-
-  int boxSelected3 = 0;
-
-
-  // List<String> tabMenuListItem2 = [
-  //   "ALL",
-  //   "GOALS",
-  //   "ASSETS",
-  //   "RED CARDS",
-  //   "YELLOW CARDS",
-  //   "SHOTS ON TARGET",
-  // ];
-
   List<String> tabMenuListItem = [
     "Results",
     "Fixtures",
@@ -58,13 +45,13 @@ class _BasketballLeagueOverviewMainState extends State<BasketballLeagueOverviewM
     var mediaQuery = MediaQuery.of(context);
 
     List<Widget> tabScreensList = [
-      OverViewBody(selection: boxSelected, isFootball: widget.isFootball),
+      BasketballOverview(selection: boxSelected, isFootball: widget.isFootball, leagueId: widget.leagueID),
       F_Standing(isShow: false,leagueId: widget.leagueID),
       const HotPage(),
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xff161616),
+      backgroundColor: Colors.black,
       appBar: AppBar(
         actions: [
           IconButton(
@@ -186,7 +173,7 @@ class _BasketballLeagueOverviewMainState extends State<BasketballLeagueOverviewM
                                     style: TextStyle(
                                       fontWeight: selectedTab == index? FontWeight.w900: FontWeight.w600,
                                       fontSize: selectedTab == index? 14: 12,
-                                      color: selectedTab == index?const Color(0xff9B8BFF):Colors.white,
+                                      color: selectedTab == index? const Color(0xff9B8BFF):Colors.white,
                                     ),
                                   ),
                                   selectedTab==index?Container(
@@ -206,7 +193,7 @@ class _BasketballLeagueOverviewMainState extends State<BasketballLeagueOverviewM
                     selectedTab==0?Container(
                       width: mediaQuery.size.width,
                       height: mediaQuery.size.height*0.07,
-                      color: const Color(0xff161616),
+                      color: Colors.black,
                       child: ListView.builder(itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: (){
@@ -228,7 +215,7 @@ class _BasketballLeagueOverviewMainState extends State<BasketballLeagueOverviewM
                                     width: mediaQuery.size.width*0.2,
                                     height: 30,
                                     decoration: BoxDecoration(
-                                        color: boxSelected==index?Color(0xff9B8BFF): Colors.black,
+                                        color: boxSelected==index?Color(0xff9B8BFF): Color(0xff161616),
                                         borderRadius: BorderRadius.circular(8)
                                     ),
                                     child: Center(
