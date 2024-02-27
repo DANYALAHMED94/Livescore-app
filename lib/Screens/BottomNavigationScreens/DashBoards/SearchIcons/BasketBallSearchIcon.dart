@@ -1,11 +1,17 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/BasketBallTeamInfo/BasketballTeamInfo.dart';
-// import '../../FavouriteScreen/FootballFavoriteBody/Teams/TeamInfo/TeamInfoMainScreen.dart';
 import 'package:http/http.dart' as http;
 
-class BasketBallSearchIcon extends StatelessWidget {
-  const BasketBallSearchIcon({super.key});
+class BasketBallSearchIcon extends StatefulWidget {
+  BasketBallSearchIcon({super.key});
+
+  @override
+  State<BasketBallSearchIcon> createState() => _BasketBallSearchIconState();
+}
+
+class _BasketBallSearchIconState extends State<BasketBallSearchIcon> {
+  String searchText = "";
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +33,14 @@ class BasketBallSearchIcon extends StatelessWidget {
                   // width: mediaQuery.size.width,
                   child: TextField(
                     style: const TextStyle(color: Colors.white),
+                    onChanged: (value) {
+                      searchText = value;
+                      setState(() {
+
+                      });
+                    },
                     decoration: InputDecoration(
                         hintText: 'Search',
-                        // fillColor: const Color(0xff212121),
                         filled: true,
                         fillColor: Colors.transparent,
                         hintStyle: const TextStyle(
@@ -75,40 +86,50 @@ class BasketBallSearchIcon extends StatelessWidget {
                           SizedBox(
                               height: mediaQuery.size.height,
                               child: ListView.builder(itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: (){
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) =>
-                                            BasketballTeamInfo(
-                                                response[index]["id"].toString(),
-                                                response[index]["name"].toString(),
-                                                response[index]["logo"].toString(),
-                                                response[index]["country"]["name"].toString()
+
+                                if (response[index]["name"]
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchText.toLowerCase()))
+                                  {
+                                    return GestureDetector(
+                                      onTap: (){
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) =>
+                                                BasketballTeamInfo(
+                                                    response[index]["id"].toString(),
+                                                    response[index]["name"].toString(),
+                                                    response[index]["logo"].toString(),
+                                                    response[index]["country"]["name"].toString()
+                                                ),
+                                            )
+                                        );
+                                      },
+                                      child: SizedBox(
+                                        height: 60,
+                                        width: mediaQuery.size.width,
+                                        child: ListTile(
+                                            dense: true,
+                                            contentPadding: const EdgeInsets.symmetric(
+                                              horizontal: 10,
                                             ),
-                                        )
+                                            leading: CircleAvatar(
+                                              backgroundColor: Colors.transparent,
+                                              backgroundImage: NetworkImage(
+                                                response[index]["logo"].toString(),
+                                              ),
+                                              radius: 20,
+                                            ),
+                                            title: Text(response[index]["name"].toString(), style: TextStyle(color: Colors.white),),
+                                            subtitle: Text(response[index]["country"]["name"].toString(), style: TextStyle(color: Colors.white),),
+                                            trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 22,)
+                                        ),
+                                      ),
                                     );
-                                  },
-                                  child: SizedBox(
-                                    height: 60,
-                                    width: mediaQuery.size.width,
-                                    child: ListTile(
-                                        dense: true,
-                                        contentPadding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                        ),
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.transparent,
-                                          backgroundImage: NetworkImage(
-                                            response[index]["logo"].toString(),
-                                          ),
-                                          radius: 20,
-                                        ),
-                                        title: Text(response[index]["name"].toString(), style: TextStyle(color: Colors.white),),
-                                        subtitle: Text(response[index]["country"]["name"].toString(), style: TextStyle(color: Colors.white),),
-                                        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 22,)
-                                    ),
-                                  ),
-                                );
+                                  }
+                                else{
+                                  return const SizedBox();
+                                }
                               },
                                 itemCount: response.length,
                               )
@@ -173,5 +194,4 @@ class BasketBallSearchIcon extends StatelessWidget {
       return response.reasonPhrase;
     }
   }
-
 }

@@ -1,4 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
+import 'package:live_score_app/Getx%20Values%20Updater/Tennis-Images-Updater.dart';
 import '../../../Widgets/S2CardsTennis.dart';
 import '../../BottomNavigationScreens/MatchesMenusSelections.dart';
 import '../../BottomNavigationScreens/DashBoards/SearchIcons/FootBallSearchIcon.dart';
@@ -17,7 +23,7 @@ class TennisDashBoardScreen extends StatefulWidget {
 class _TennisDashBoardScreenState extends State<TennisDashBoardScreen> {
   int selectedDateTime=0;
 
-  int selectedImageLevel=0;
+  // int selectedImageLevel=0;
 
   List<String> imagesDashboard = [
     "assets/images/tennisDashboardImage1.png",
@@ -26,6 +32,22 @@ class _TennisDashBoardScreenState extends State<TennisDashBoardScreen> {
   ];
 
   bool isLive=false;
+
+  List<String> daysOfWeek = [];
+  List<String> monthsAndDates = [];
+
+  TennisImagesChanger imageUpdater = Get.put(TennisImagesChanger());
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Timer.periodic(const Duration(seconds: 30), (timer) {
+      imageUpdater.imageUpdaterFunction();
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +58,7 @@ class _TennisDashBoardScreenState extends State<TennisDashBoardScreen> {
         actions: [
           IconButton(onPressed: (){
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) =>
-                const FootballSearchIcon(),));
+                MaterialPageRoute(builder: (context) => FootballSearchIcon(),));
           }, icon: const Icon(Icons.search, size: 28, color: Colors.white,)),
           Padding(
             padding: const EdgeInsets.only(
@@ -134,6 +155,11 @@ class _TennisDashBoardScreenState extends State<TennisDashBoardScreen> {
                             horizontal: 5
                         ),
                         child: ListView.builder(itemBuilder: (context, index) {
+
+                          DateTime currentDate = DateTime.now().add(Duration(days: index));
+                          String formattedDay = DateFormat('E').format(currentDate);
+                          daysOfWeek.add(formattedDay);
+
                           return GestureDetector(
                             onTap: (){
                               setState(() {
@@ -143,21 +169,24 @@ class _TennisDashBoardScreenState extends State<TennisDashBoardScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Sun",
+                                Text(
+                                  daysOfWeek[index].toString(),
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: selectedDateTime == index?Colors.white:Colors.grey),),
-                                Text("28 Oct",
+                                Text(
+                                  "${(int.parse(DateTime.now().day.toString())+index).toString()} ${DateFormat("MMM").format(DateTime.now())}",
                                   style: TextStyle(
-                                      fontSize: 10,
-                                      color: selectedDateTime == index?Colors.white:Colors.grey),),
+                                      fontSize: 9,
+                                      color: selectedDateTime == index?Colors.white:Colors.grey),
+                                ),
                               ],
                             ),
                           );
                         },
                           scrollDirection: Axis.horizontal,
                           itemExtent: 42,
-                          itemCount: 10,
+                          itemCount: 7,
                         ),
                       ),
                     ),
@@ -173,47 +202,38 @@ class _TennisDashBoardScreenState extends State<TennisDashBoardScreen> {
                 height: mediaQuery.size.height*0.135,
                 child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: (){
-                        if(selectedImageLevel==2){
-                          setState(() {
-                            selectedImageLevel = 0;
-                          });
-                        }
-                        else{
-                          setState(() {
-                            selectedImageLevel = selectedImageLevel+1;
-                          });
-                        }
-                      },
-                      child: Container(
+                    Obx(() {
+                      return Container(
                         height: mediaQuery.size.height*0.11,
                         width: mediaQuery.size.width*0.9,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(imagesDashboard[selectedImageLevel]),
+                                image: AssetImage(imagesDashboard[int.parse(imageUpdater.imageCounter.toString())]),
                                 fit: BoxFit.fill
                             ),
                             // color: Colors.grey.shade500,
                             borderRadius: BorderRadius.circular(8)
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: mediaQuery.size.height*0.025,
-                      width: mediaQuery.size.width*0.4,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          for(int i=0;i<3;i++) SizedBox(
-                            width: 30,
-                            child: Divider(
-                                thickness: 2,
-                                color: i<=selectedImageLevel?Colors.white:Colors.grey.shade800),
-                          )
-                        ],
-                      ),
-                    )
+                      );
+                    }),
+
+                    Obx(() {
+                      return SizedBox(
+                        height: mediaQuery.size.height*0.025,
+                        width: mediaQuery.size.width*0.4,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            for(int i=0;i<3;i++) SizedBox(
+                              width: 30,
+                              child: Divider(
+                                  thickness: 2,
+                                  color: i<=int.parse(imageUpdater.imageCounter.toString())?Colors.white:Colors.grey.shade800),
+                            )
+                          ],
+                        ),
+                      );
+                    })
                   ],
                 ),
               ),

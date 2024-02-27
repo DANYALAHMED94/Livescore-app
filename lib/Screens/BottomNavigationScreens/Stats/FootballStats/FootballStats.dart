@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/SearchIcons/FootballLeagueSearch.dart';
 import '../../../ModelClasses/LeagueModel.dart';
 import '../../../setting_screen.dart';
 import '../../MatchesMenusSelections.dart';
@@ -23,8 +23,7 @@ class FootBallStats extends StatelessWidget {
           actions: [
             IconButton(onPressed: (){
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) =>
-                  const FootballSearchIcon(),));
+                  MaterialPageRoute(builder: (context) => FootballLeaguesSearchIcon(),));
             }, icon: const Icon(Icons.search, size: 28, color: Colors.white,)),
             Padding(
               padding: const EdgeInsets.only(
@@ -61,152 +60,152 @@ class FootBallStats extends StatelessWidget {
             ),
           ),
         ),
-      body: SizedBox(
-        height: mediaQuery.size.height,
-        width: mediaQuery.size.width,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
+        body: SizedBox(
+          height: mediaQuery.size.height,
+          width: mediaQuery.size.width,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
 
-            FutureBuilder(
-                future: leagueInformation(),
-                builder: (context, snapshot) {
-                  if(snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        backgroundColor: Colors.grey,
-                      ),
-                    );
-                  }
-                  else if(snapshot.hasData) {
+              FutureBuilder(
+                  future: leagueInformation(),
+                  builder: (context, snapshot) {
+                    if(snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          backgroundColor: Colors.grey,
+                        ),
+                      );
+                    }
+                    else if(snapshot.hasData) {
 
-                    var mapData = jsonDecode(snapshot.data.toString());
-                    var response = mapData["response"];
+                      var mapData = jsonDecode(snapshot.data.toString());
+                      var response = mapData["response"];
 
-                    for(var leagueInfo in response) {
-                      leagueList.add(
-                        LeagueModel(
-                          leagueInfo["league"]["name"].toString(),
-                          leagueInfo["league"]["id"].toString(),
-                          leagueInfo["country"]["name"].toString(),
-                          leagueInfo["league"]["logo"].toString(),
-                        )
+                      for(var leagueInfo in response) {
+                        leagueList.add(
+                          LeagueModel(
+                            leagueInfo["league"]["name"].toString(),
+                            leagueInfo["league"]["id"].toString(),
+                            leagueInfo["country"]["name"].toString(),
+                            leagueInfo["league"]["logo"].toString(),
+                          )
+                        );
+                      }
+
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 30,
+                              padding: const EdgeInsets.only(
+                                  top: 5,
+                                  left: 20
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 10
+                              ),
+                              width: mediaQuery.size.width,
+                              color: Colors.grey.shade300,
+                              child: const Text("Top Competitions", style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500),),
+                            ),
+
+                            SizedBox(
+                                height: mediaQuery.size.height*1.56,
+                                child: ListView.separated(
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) =>
+                                              FootBallMainSubStatsScreens(
+                                                leagueName: leagueList[index].leagueName.toString(),
+                                                leagueID: leagueList[index].leagueId.toString(),
+                                                leagueLogo: leagueList[index].leagueLogo.toString(),
+                                                leagueCountry: leagueList[index].leagueCountry.toString(),
+                                              ),
+                                          )
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      height: 60,
+                                      width: mediaQuery.size.width,
+                                      child: ListTile(
+                                          dense: true,
+                                          contentPadding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                          ),
+                                          leading: CircleAvatar(
+                                            backgroundColor: Colors.transparent,
+                                            backgroundImage: NetworkImage(
+                                                leagueList[index].leagueLogo.toString()
+                                            ),
+                                            radius: 18,
+                                          ),
+                                          title: Text(leagueList[index].leagueName.toString(), style: TextStyle(color: Colors.white),),
+                                          subtitle: Text(leagueList[index].leagueCountry.toString(), style: TextStyle(color: Colors.white),),
+                                          trailing: IconButton(
+                                              onPressed: (){
+                                                Navigator.push(context,
+                                                    MaterialPageRoute(builder: (context) =>
+                                                        FootBallMainSubStatsScreens(
+                                                          leagueName: leagueList[index].leagueName.toString(),
+                                                          leagueID: leagueList[index].leagueId.toString(),
+                                                          leagueLogo: leagueList[index].leagueLogo.toString(),
+                                                          leagueCountry: leagueList[index].leagueCountry.toString(),
+                                                        ),
+                                                    )
+                                                );
+                                              },
+                                              icon: const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 18,)
+                                          )
+                                      ),
+                                    ),
+                                  );
+                                    },
+                                  separatorBuilder: (context, index) => Divider(thickness: 0.5,),
+                                  itemCount: leagueList.length,
+                                  physics: const BouncingScrollPhysics(),
+                                )
+                            ),
+
+                          ],
+                        ),
                       );
                     }
 
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 30,
-                            padding: const EdgeInsets.only(
-                                top: 5,
-                                left: 20
-                            ),
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 10
-                            ),
-                            width: mediaQuery.size.width,
-                            color: Colors.grey.shade300,
-                            child: const Text("Top Competitions", style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500),),
-                          ),
+                    else {
+                      return const Text("Sorry Their is an Server Issue Occurring",
+                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      );
+                    }
+                  },
+              ),
 
-                          SizedBox(
-                              height: mediaQuery.size.height*1.56,
-                              child: ListView.separated(
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                  onTap: (){
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) =>
-                                            FootBallMainSubStatsScreens(
-                                              leagueName: leagueList[index].leagueName.toString(),
-                                              leagueID: leagueList[index].leagueId.toString(),
-                                              leagueLogo: leagueList[index].leagueLogo.toString(),
-                                              leagueCountry: leagueList[index].leagueCountry.toString(),
-                                            ),
-                                        )
-                                    );
-                                  },
-                                  child: SizedBox(
-                                    height: 60,
-                                    width: mediaQuery.size.width,
-                                    child: ListTile(
-                                        dense: true,
-                                        contentPadding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                        ),
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.transparent,
-                                          backgroundImage: NetworkImage(
-                                              leagueList[index].leagueLogo.toString()
-                                          ),
-                                          radius: 18,
-                                        ),
-                                        title: Text(leagueList[index].leagueName.toString(), style: TextStyle(color: Colors.white),),
-                                        subtitle: Text(leagueList[index].leagueCountry.toString(), style: TextStyle(color: Colors.white),),
-                                        trailing: IconButton(
-                                            onPressed: (){
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(builder: (context) =>
-                                                      FootBallMainSubStatsScreens(
-                                                        leagueName: leagueList[index].leagueName.toString(),
-                                                        leagueID: leagueList[index].leagueId.toString(),
-                                                        leagueLogo: leagueList[index].leagueLogo.toString(),
-                                                        leagueCountry: leagueList[index].leagueCountry.toString(),
-                                                      ),
-                                                  )
-                                              );
-                                            },
-                                            icon: const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 18,)
-                                        )
-                                    ),
-                                  ),
-                                );
-                                  },
-                                separatorBuilder: (context, index) => Divider(thickness: 0.5,),
-                                itemCount: leagueList.length,
-                                physics: const BouncingScrollPhysics(),
-                              )
-                          ),
-
-                        ],
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  height: mediaQuery.size.height*0.06,
+                  width: mediaQuery.size.width,
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 5
+                  ),
+                  decoration: BoxDecoration(
+                      image: const DecorationImage(
+                          image: AssetImage("assets/images/banner.png"),
+                          fit: BoxFit.fill
                       ),
-                    );
-                  }
-
-                  else {
-                    return const Text("Sorry Their is an Server Issue Occurring",
-                      style: TextStyle(fontSize: 12, color: Colors.white),
-                    );
-                  }
-                },
-            ),
-
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                height: mediaQuery.size.height*0.06,
-                width: mediaQuery.size.width,
-                margin: const EdgeInsets.symmetric(
-                    horizontal: 5
-                ),
-                decoration: BoxDecoration(
-                    image: const DecorationImage(
-                        image: AssetImage("assets/images/banner.png"),
-                        fit: BoxFit.fill
-                    ),
-                    color: Colors.grey.shade500,
-                    borderRadius: BorderRadius.circular(8)
+                      color: Colors.grey.shade500,
+                      borderRadius: BorderRadius.circular(8)
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          )
         )
-      )
     );
   }
 

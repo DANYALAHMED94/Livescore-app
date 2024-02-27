@@ -1,9 +1,16 @@
 import 'dart:convert';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import '../Getx Values Updater/Football_Team_Notification_Icons_Replacer.dart';
 import 'fav_competitor_team.dart';
 import 'package:http/http.dart' as http;
 
 class FavouriteTeamScreen extends StatelessWidget {
+
+  FootballTeamNotificationsIconsReplacer favoriteTeamsList = Get.put(FootballTeamNotificationsIconsReplacer());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,6 +18,7 @@ class FavouriteTeamScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
+          physics: const NeverScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -71,17 +79,30 @@ class FavouriteTeamScreen extends StatelessWidget {
                       var response = mapData["response"];
 
                       return SizedBox(
-                        height: MediaQuery.of(context).size.height*0.6,
+                        height: MediaQuery.of(context).size.height*0.5,
                         child: ListView.builder(
                           itemBuilder: (context, index) {
-                            return FavTeamList(
-                              response[index]["team"]["name"].toString(),
-                              response[index]["team"]["logo"].toString(),
-                              response[index]["team"]["country"].toString(),
+                            return GestureDetector(
+                              onTap: (){
+
+                                if(favoriteTeamsList.selectedTeamIds.toString().contains(response[index]["team"]["id"].toString()))
+                                  {
+                                    favoriteTeamsList.removeFromFavouriteMethod(response[index]["team"]["id"].toString());
+                                  }
+                                else{
+                                  favoriteTeamsList.addToFavouriteMethod(response[index]["team"]["id"].toString());
+                                }
+                              },
+                              child: favTeamList(
+                                response[index]["team"]["name"].toString(),
+                                response[index]["team"]["logo"].toString(),
+                                response[index]["team"]["country"].toString(),
+                                response[index]["team"]["id"].toString(),
+                              ),
                             );
                           },
-                          itemCount: response.length,
-                          physics: const BouncingScrollPhysics(),
+                          itemCount: 5,
+                          physics: NeverScrollableScrollPhysics(),
                         ),
                       );
                     }
@@ -109,12 +130,7 @@ class FavouriteTeamScreen extends StatelessWidget {
                       RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)))),
               onPressed: () {
-                // Add your logic for the 'Next' button
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            FavouriteCompetitorTeamScreen()));
+                dataTeamIDStorage(context);
               },
               child: const Text(
                 'Next',
@@ -123,6 +139,35 @@ class FavouriteTeamScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget favTeamList(String teamName, String teamLogo, String teamCountry,String id) {
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+      color: const Color(0xff161616),
+      child: ListTile(
+        dense: true,
+        leading: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            backgroundImage: NetworkImage(
+                teamLogo.toString()
+            )
+        ),
+        title: Text(
+          teamName.toString(),
+          style: const TextStyle(color: Colors.white),
+        ),
+        subtitle: Text(
+          teamCountry.toString(),
+          style: TextStyle(color: Colors.grey[500]),
+        ),
+        trailing: Obx(() => Icon(
+          favoriteTeamsList.selectedTeamIds.contains(id)?Icons.notifications_active:Icons.notifications_outlined,
+          color: Color(0xff9B8BFF),
+        ))
       ),
     );
   }
@@ -137,7 +182,7 @@ class FavouriteTeamScreen extends StatelessWidget {
     };
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/teams?league=39&season=2021')
+        Uri.parse('https://v3.football.api-sports.io/teams?league=39&season=2023')
     );
 
     request.headers.addAll(headers);
@@ -152,40 +197,24 @@ class FavouriteTeamScreen extends StatelessWidget {
     }
   }
 
-}
+  dataTeamIDStorage(BuildContext context) async{
 
-class FavTeamList extends StatelessWidget {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("1").child("favoriteTeamsList");
 
-  String teamName, teamLogo, teamCountry;
-
-  FavTeamList(this.teamName, this.teamLogo, this.teamCountry);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-      color: const Color(0xff161616),
-      child: ListTile(
-        dense: true,
-        leading: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          backgroundImage: NetworkImage(
-            teamLogo.toString()
-          )
-        ),
-        title: Text(
-          teamName.toString(),
-          style: const TextStyle(color: Colors.white),
-        ),
-        subtitle: Text(
-          teamCountry.toString(),
-          style: TextStyle(color: Colors.grey[500]),
-        ),
-        trailing: const Icon(
-          Icons.notifications_outlined,
-          color: Color(0xff9B8BFF),
-        ),
-      ),
-    );
+    await ref.set({
+      "team1ID": favoriteTeamsList.selectedTeamIds.length > 0 ? (favoriteTeamsList.selectedTeamIds[0]?.toString()?.isEmpty ?? true) ? "" : favoriteTeamsList.selectedTeamIds[0]?.toString() : "",
+      "team2ID": favoriteTeamsList.selectedTeamIds.length > 1 ? (favoriteTeamsList.selectedTeamIds[1]?.toString()?.isEmpty ?? true) ? "" : favoriteTeamsList.selectedTeamIds[1]?.toString() : "",
+      "team3ID": favoriteTeamsList.selectedTeamIds.length > 2 ? (favoriteTeamsList.selectedTeamIds[2]?.toString()?.isEmpty ?? true) ? "" : favoriteTeamsList.selectedTeamIds[2]?.toString() : "",
+      "team4ID": favoriteTeamsList.selectedTeamIds.length > 3 ? (favoriteTeamsList.selectedTeamIds[3]?.toString()?.isEmpty ?? true) ? "" : favoriteTeamsList.selectedTeamIds[3]?.toString() : "",
+      "team5ID": favoriteTeamsList.selectedTeamIds.length > 4 ? (favoriteTeamsList.selectedTeamIds[4]?.toString()?.isEmpty ?? true) ? "" : favoriteTeamsList.selectedTeamIds[4]?.toString() : "",
+    }).then((value) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  FavouriteCompetitorTeamScreen()));
+    }).onError((error, stackTrace){
+      Fluttertoast.showToast(msg: error.toString());
+    });
   }
 }

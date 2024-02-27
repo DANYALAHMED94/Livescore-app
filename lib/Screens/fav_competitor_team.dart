@@ -1,10 +1,25 @@
 import 'dart:convert';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import '../Getx Values Updater/Football_League_Notification_Icons_Replacer.dart';
 import 'BottomNavigationScreens/MainScreen.dart';
 import 'package:http/http.dart' as http;
 
 class FavouriteCompetitorTeamScreen extends StatelessWidget {
-  const FavouriteCompetitorTeamScreen({super.key});
+  FavouriteCompetitorTeamScreen({super.key});
+
+  FootballLeagueNotificationsIconsReplacer favoriteLeagueList = Get.put(FootballLeagueNotificationsIconsReplacer());
+
+  List<String> leaguesID = [
+    "2",
+    "39",
+    "310",
+    "186",
+    "809"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -78,16 +93,33 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
                       var mapData = jsonDecode(snapshot.data.toString());
                       var response = mapData["response"];
 
+                      var filteredResponse = response
+                          .where((item) => leaguesID.contains(item["league"]["id"].toString()))
+                          .toList();
+
                       return SizedBox(
-                        height: MediaQuery.of(context).size.height*2,
+                        height: MediaQuery.of(context).size.height * 0.45,
                         child: ListView.builder(
                           itemBuilder: (context, index) {
-                            return FavTeamList(
-                              response[index]["league"]["name"].toString(),
-                              response[index]["league"]["logo"].toString(),
+                            return GestureDetector(
+                              onTap: (){
+
+                                if(favoriteLeagueList.selectedTeamIds.toString().contains(filteredResponse[index]["league"]["id"].toString()))
+                                {
+                                  favoriteLeagueList.removeFromFavouriteMethod(filteredResponse[index]["league"]["id"].toString());
+                                }
+                                else{
+                                  favoriteLeagueList.addToFavouriteMethod(filteredResponse[index]["league"]["id"].toString());
+                                }
+                              },
+                              child: favTeamList(
+                                filteredResponse[index]["league"]["name"].toString(),
+                                filteredResponse[index]["league"]["logo"].toString(),
+                                filteredResponse[index]["league"]["id"].toString(),
+                              ),
                             );
                           },
-                          itemCount: response.length,
+                          itemCount: filteredResponse.length,
                           physics: const BouncingScrollPhysics(),
                         ),
                       );
@@ -117,13 +149,12 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
                   ),
                   shape: MaterialStatePropertyAll(
                       RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)))),
+                          borderRadius: BorderRadius.circular(10)
+                      )
+                  )
+              ),
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            MainScreen(gameChoice: "Football",)));
+                dataLeagueIDStorage(context);
               },
               child: const Text(
                 'Save',
@@ -146,7 +177,7 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
     };
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/leagues?season=2021')
+        Uri.parse('https://v3.football.api-sports.io/leagues?season=2023')
     );
 
     request.headers.addAll(headers);
@@ -161,30 +192,22 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
     }
   }
 
-}
-
-class FavTeamList extends StatelessWidget {
-  String leagueName, leagueLogo;
-
-  FavTeamList(this.leagueName, this.leagueLogo);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget favTeamList(String leagueName, String leagueLogo, String id) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
       color: const Color(0xff161616),
       child: Container(
         color: Colors.transparent,
         margin: const EdgeInsets.symmetric(
-          vertical: 5
+            vertical: 5
         ),
         child: ListTile(
           dense: true,
           leading: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            backgroundImage: NetworkImage(
-              leagueLogo.toString()
-            )
+              backgroundColor: Colors.transparent,
+              backgroundImage: NetworkImage(
+                  leagueLogo.toString()
+              )
           ),
           title: Text(
             leagueName.toString(),
@@ -192,16 +215,36 @@ class FavTeamList extends StatelessWidget {
               color: Color(0xff9B8BFF),
             ),
           ),
-          // subtitle: Text(
-          //   'Category',
-          //   style: TextStyle(color: Colors.grey[500]),
-          // ),
-          trailing: Icon(
-            Icons.notifications_outlined,
+          trailing: Obx(() => Icon(
+            favoriteLeagueList.selectedTeamIds.contains(id)?Icons.notifications_active:Icons.notifications_outlined,
             color: Color(0xff9B8BFF),
-          ),
+          ))
         ),
       ),
     );
   }
+
+  dataLeagueIDStorage(BuildContext context) async{
+
+    DatabaseReference ref = FirebaseDatabase.instance.ref("1").child("favoriteLeagueList");
+
+    await ref.set({
+      "League1ID": favoriteLeagueList.selectedTeamIds.length > 0 ? (favoriteLeagueList.selectedTeamIds[0]?.toString()?.isEmpty ?? true) ? "" : favoriteLeagueList.selectedTeamIds[0]?.toString() : "",
+      "League2ID": favoriteLeagueList.selectedTeamIds.length > 1 ? (favoriteLeagueList.selectedTeamIds[1]?.toString()?.isEmpty ?? true) ? "" : favoriteLeagueList.selectedTeamIds[1]?.toString() : "",
+      "League3ID": favoriteLeagueList.selectedTeamIds.length > 2 ? (favoriteLeagueList.selectedTeamIds[2]?.toString()?.isEmpty ?? true) ? "" : favoriteLeagueList.selectedTeamIds[2]?.toString() : "",
+      "League4ID": favoriteLeagueList.selectedTeamIds.length > 3 ? (favoriteLeagueList.selectedTeamIds[3]?.toString()?.isEmpty ?? true) ? "" : favoriteLeagueList.selectedTeamIds[3]?.toString() : "",
+      "League5ID": favoriteLeagueList.selectedTeamIds.length > 4 ? (favoriteLeagueList.selectedTeamIds[4]?.toString()?.isEmpty ?? true) ? "" : favoriteLeagueList.selectedTeamIds[4]?.toString() : "",
+    }).then((value) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  MainScreen(gameChoice: "Football")
+          )
+      );
+    }).onError((error, stackTrace){
+      Fluttertoast.showToast(msg: error.toString());
+    });
+  }
+
 }

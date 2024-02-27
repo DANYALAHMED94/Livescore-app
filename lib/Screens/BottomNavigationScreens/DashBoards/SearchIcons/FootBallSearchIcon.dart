@@ -3,8 +3,23 @@ import 'package:flutter/material.dart';
 import '../../FavouriteScreen/FootballFavoriteBody/Teams/TeamInfo/TeamInfoMainScreen.dart';
 import 'package:http/http.dart' as http;
 
-class FootballSearchIcon extends StatelessWidget {
-  const FootballSearchIcon({super.key});
+class FootballSearchIcon extends StatefulWidget {
+  FootballSearchIcon({super.key});
+
+  @override
+  State<FootballSearchIcon> createState() => _FootballSearchIconState();
+}
+
+class _FootballSearchIconState extends State<FootballSearchIcon> {
+
+  String searchText = "";
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   teamsList.clear();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +40,15 @@ class FootballSearchIcon extends StatelessWidget {
                 height: 55,
                 // width: mediaQuery.size.width,
                 child: TextField(
+                  onChanged: (value) {
+                    searchText = value;
+                    setState(() {
+
+                    });
+                  },
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                       hintText: 'Search',
-                      // fillColor: const Color(0xff212121),
                       filled: true,
                       fillColor: Colors.transparent,
                       hintStyle: const TextStyle(
@@ -73,40 +93,50 @@ class FootballSearchIcon extends StatelessWidget {
                         SizedBox(
                             height: mediaQuery.size.height,
                             child: ListView.builder(itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: (){
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) =>
-                                          TeamInfoMainScreen(
-                                              response[index]["team"]["id"].toString(),
-                                              response[index]["team"]["name"].toString(),
-                                              response[index]["team"]["logo"].toString(),
-                                              response[index]["team"]["country"].toString()
-                                          ),
-                                      )
-                                  );
-                                },
-                                child: SizedBox(
-                                  height: 60,
-                                  width: mediaQuery.size.width,
-                                  child: ListTile(
-                                      dense: true,
-                                      contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                      ),
-                                      leading: CircleAvatar(
-                                        backgroundColor: Colors.transparent,
-                                        backgroundImage: NetworkImage(
-                                          response[index]["team"]["logo"].toString(),
+
+                              if (response[index]["team"]["name"]
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchText.toLowerCase()))
+                              {
+                                return GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) =>
+                                            TeamInfoMainScreen(
+                                                response[index]["team"]["id"].toString(),
+                                                response[index]["team"]["name"].toString(),
+                                                response[index]["team"]["logo"].toString(),
+                                                response[index]["team"]["country"].toString()
+                                            ),
+                                        )
+                                    );
+                                  },
+                                  child: SizedBox(
+                                    height: 60,
+                                    width: mediaQuery.size.width,
+                                    child: ListTile(
+                                        dense: true,
+                                        contentPadding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
                                         ),
-                                        radius: 20,
-                                      ),
-                                      title: Text(response[index]["team"]["name"].toString(), style: TextStyle(color: Colors.white),),
-                                      subtitle: Text(response[index]["team"]["country"].toString(), style: TextStyle(color: Colors.white),),
-                                      trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 22,)
+                                        leading: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          backgroundImage: NetworkImage(
+                                            response[index]["team"]["logo"].toString(),
+                                          ),
+                                          radius: 20,
+                                        ),
+                                        title: Text(response[index]["team"]["name"].toString(), style: TextStyle(color: Colors.white),),
+                                        subtitle: Text(response[index]["team"]["country"].toString(), style: TextStyle(color: Colors.white),),
+                                        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 22,)
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              }
+                              else{
+                                return const SizedBox();
+                              }
                             },
                               itemCount: 15,
                             )
@@ -150,12 +180,14 @@ class FootballSearchIcon extends StatelessWidget {
   Future teamInformation() async{
 
     const String apiKey = "0a9ce6deb596f61f4e33463c192bd31c";
+    var request;
 
     var headers = {
       'x-rapidapi-key': apiKey,
       'x-rapidapi-host': 'https://api-football-v1.p.rapidapi.com/v3/teams'
     };
-    var request = http.Request(
+
+    request = http.Request(
         'GET',
         Uri.parse('https://v3.football.api-sports.io/teams?league=39&season=2021')
     );
@@ -171,5 +203,4 @@ class FootballSearchIcon extends StatelessWidget {
       return response.reasonPhrase;
     }
   }
-
 }

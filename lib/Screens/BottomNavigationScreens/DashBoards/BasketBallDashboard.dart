@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/BasketBallSummary/BasketballSummayMainScreen.dart';
 import 'package:live_score_app/Screens/BottomNavigationScreens/DashBoards/Basketball-League-Overview/BasketballLeagueOverviewMain.dart';
+import '../../../Getx Values Updater/Basketball-Images-Changer.dart';
 import '../../setting_screen.dart';
 import '../MatchesMenusSelections.dart';
 import 'SearchIcons/BasketBallSearchIcon.dart';
@@ -17,9 +21,12 @@ class BasketBallDashBoardScreen extends StatefulWidget {
 
 class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
 
+  BasketBallImagesChanger imageUpdater = Get.put(BasketBallImagesChanger());
+
   int selectedDateTime = 0;
 
-  int selectedImageLevel=0;
+
+  List<String> daysOfWeek = [];
 
   List<String> imagesDashboard = [
     "assets/images/basketballDashboardImage1.png",
@@ -30,6 +37,15 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
   bool isLive=false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Timer.periodic(const Duration(seconds: 30), (timer) {
+      imageUpdater.imageUpdaterFunction();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
     return Scaffold(
@@ -38,8 +54,7 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
         actions: [
           IconButton(onPressed: (){
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) =>
-                const BasketBallSearchIcon(),
+                MaterialPageRoute(builder: (context) => BasketBallSearchIcon(),
                 )
             );
           }, icon: const Icon(Icons.search, size: 28, color: Colors.white,)),
@@ -142,6 +157,11 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
                             horizontal: 5
                         ),
                         child: ListView.builder(itemBuilder: (context, index) {
+
+                          DateTime currentDate = DateTime.now().add(Duration(days: index));
+                          String formattedDay = DateFormat('E').format(currentDate);
+                          daysOfWeek.add(formattedDay);
+
                           return GestureDetector(
                             onTap: (){
                               setState(() {
@@ -151,25 +171,36 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Sun",
+                                Text(
+                                  daysOfWeek[index].toString(),
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: selectedDateTime == index?Colors.white:Colors.grey),),
-                                Text("28 Oct",
+                                Text(
+                                  "${(int.parse(DateTime.now().day.toString())+index).toString()} ${DateFormat("MMM").format(DateTime.now())}",
                                   style: TextStyle(
-                                      fontSize: 10,
-                                      color: selectedDateTime == index?Colors.white:Colors.grey),),
+                                      fontSize: 9,
+                                      color: selectedDateTime == index?Colors.white:Colors.grey),
+                                ),
                               ],
                             ),
                           );
                         },
                           scrollDirection: Axis.horizontal,
                           itemExtent: 42,
-                          itemCount: 10,
+                          itemCount: 7,
                         ),
                       ),
                     ),
-                    const Icon(Icons.calendar_month_outlined, size: 25,color: Colors.white,)
+                    IconButton(
+                        onPressed: (){
+                          _selectDate(context);
+                        },
+                        icon: const Icon(
+                          Icons.calendar_month_outlined,
+                          size: 25,color: Colors.white,
+                        )
+                    ),
                   ],
                 ),
               ),
@@ -181,47 +212,40 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
                 height: mediaQuery.size.height*0.135,
                 child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: (){
-                        if(selectedImageLevel==2){
-                          setState(() {
-                            selectedImageLevel = 0;
-                          });
-                        }
-                        else{
-                          setState(() {
-                            selectedImageLevel = selectedImageLevel+1;
-                          });
-                        }
-                      },
-                      child: Container(
+                    Obx(()
+                    {
+                      return Container(
                         height: mediaQuery.size.height*0.11,
                         width: mediaQuery.size.width*0.9,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(imagesDashboard[selectedImageLevel]),
+                                image: AssetImage(imagesDashboard[int.parse(imageUpdater.imageCounter.toString())]),
                                 fit: BoxFit.fill
                             ),
                             // color: Colors.grey.shade500,
                             borderRadius: BorderRadius.circular(8)
                         ),
-                      ),
+                      );
+                    }
                     ),
-                    SizedBox(
-                      height: mediaQuery.size.height*0.025,
-                      width: mediaQuery.size.width*0.4,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          for(int i=0;i<3;i++) SizedBox(
-                            width: 30,
-                            child: Divider(
-                                thickness: 2,
-                                color: i<=selectedImageLevel?Colors.white:Colors.grey.shade800),
-                          )
-                        ],
-                      ),
-                    )
+
+                    Obx(() {
+                      return SizedBox(
+                        height: mediaQuery.size.height*0.025,
+                        width: mediaQuery.size.width*0.4,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            for(int i=0;i<3;i++) SizedBox(
+                              width: 30,
+                              child: Divider(
+                                  thickness: 2,
+                                  color: i<=int.parse(imageUpdater.imageCounter.toString())?Colors.white:Colors.grey.shade800),
+                            )
+                          ],
+                        ),
+                      );
+                    })
                   ],
                 ),
               ),
@@ -655,6 +679,22 @@ class _BasketBallDashBoardScreenState extends State<BasketBallDashBoardScreen> {
     }
     else {
       return response.reasonPhrase;
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDatePickerMode: DatePickerMode.year,
+      barrierColor: Colors.black.withOpacity(0.8),
+      initialDate: DateTime(2011),
+      firstDate: DateTime(2011),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null && picked != DateTime.now()) {
+      print('Selected date: $picked');
+      // Do something with the selected date
     }
   }
 
