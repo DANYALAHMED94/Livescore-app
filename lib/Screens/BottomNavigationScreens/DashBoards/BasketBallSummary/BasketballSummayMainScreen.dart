@@ -42,7 +42,7 @@ class _BasketballSummaryMainScreenState extends State<BasketballSummaryMainScree
   int selectedTab = 0;
 
   List<String> tabMenuList = [
-    "SUMMARY",
+    // "SUMMARY",
     "STATS",
     // "LINEUPS",
     "STANDINGS",
@@ -53,7 +53,7 @@ class _BasketballSummaryMainScreenState extends State<BasketballSummaryMainScree
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
     List<Widget> tabScreensList = [
-      BasketBallSummary(),
+      // BasketBallSummary(),
       BasketballStats(gameId: widget.gameId),
       // BasketballLineUps(),
       B_Standing(isShow: false, leagueId: widget.leagueId),
@@ -87,7 +87,7 @@ class _BasketballSummaryMainScreenState extends State<BasketballSummaryMainScree
       backgroundColor: const Color(0xff161616),
       body: SwipeDetector(
         onSwipeLeft: (offset) {
-          if(selectedTab<4){
+          if(selectedTab<3){
             setState(() {
               selectedTab = selectedTab+1;
             });

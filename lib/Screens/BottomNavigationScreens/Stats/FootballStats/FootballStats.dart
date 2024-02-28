@@ -13,6 +13,16 @@ class FootBallStats extends StatelessWidget {
 
   List<LeagueModel> leagueList = [];
 
+  List<String> leaguesId = [
+    "39",
+    "71",
+    "61",
+    "78",
+    "88",
+    "2",
+    "3"
+  ];
+
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
@@ -113,58 +123,69 @@ class FootBallStats extends StatelessWidget {
 
                             SizedBox(
                                 height: mediaQuery.size.height*1.56,
-                                child: ListView.separated(
+                                child: ListView.builder(
                                   itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                    onTap: (){
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) =>
-                                              FootBallMainSubStatsScreens(
-                                                leagueName: leagueList[index].leagueName.toString(),
-                                                leagueID: leagueList[index].leagueId.toString(),
-                                                leagueLogo: leagueList[index].leagueLogo.toString(),
-                                                leagueCountry: leagueList[index].leagueCountry.toString(),
+
+                                    if(leaguesId.contains(leagueList[index].leagueId.toString())){
+                                      return GestureDetector(
+                                        onTap: (){
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (context) =>
+                                                  FootBallMainSubStatsScreens(
+                                                    leagueName: leagueList[index].leagueName.toString(),
+                                                    leagueID: leagueList[index].leagueId.toString(),
+                                                    leagueLogo: leagueList[index].leagueLogo.toString(),
+                                                    leagueCountry: leagueList[index].leagueCountry.toString(),
+                                                  ),
+                                              )
+                                          );
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 0.2,
+                                              style: BorderStyle.solid
+                                            )
+                                          ),
+                                          height: 60,
+                                          width: mediaQuery.size.width,
+                                          child: ListTile(
+                                              dense: true,
+                                              contentPadding: const EdgeInsets.symmetric(
+                                                horizontal: 10,
                                               ),
-                                          )
+                                              leading: CircleAvatar(
+                                                backgroundColor: Colors.transparent,
+                                                backgroundImage: NetworkImage(
+                                                    leagueList[index].leagueLogo.toString()
+                                                ),
+                                                radius: 20,
+                                              ),
+                                              title: Text(leagueList[index].leagueName.toString(), style: TextStyle(color: Colors.white),),
+                                              subtitle: Text(leagueList[index].leagueCountry.toString(), style: TextStyle(color: Colors.white),),
+                                              trailing: IconButton(
+                                                  onPressed: (){
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(builder: (context) =>
+                                                            FootBallMainSubStatsScreens(
+                                                              leagueName: leagueList[index].leagueName.toString(),
+                                                              leagueID: leagueList[index].leagueId.toString(),
+                                                              leagueLogo: leagueList[index].leagueLogo.toString(),
+                                                              leagueCountry: leagueList[index].leagueCountry.toString(),
+                                                            ),
+                                                        )
+                                                    );
+                                                  },
+                                                  icon: const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 18,)
+                                              )
+                                          ),
+                                        ),
                                       );
+                                    }
+                                    return SizedBox();
                                     },
-                                    child: SizedBox(
-                                      height: 60,
-                                      width: mediaQuery.size.width,
-                                      child: ListTile(
-                                          dense: true,
-                                          contentPadding: const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                          ),
-                                          leading: CircleAvatar(
-                                            backgroundColor: Colors.transparent,
-                                            backgroundImage: NetworkImage(
-                                                leagueList[index].leagueLogo.toString()
-                                            ),
-                                            radius: 18,
-                                          ),
-                                          title: Text(leagueList[index].leagueName.toString(), style: TextStyle(color: Colors.white),),
-                                          subtitle: Text(leagueList[index].leagueCountry.toString(), style: TextStyle(color: Colors.white),),
-                                          trailing: IconButton(
-                                              onPressed: (){
-                                                Navigator.push(context,
-                                                    MaterialPageRoute(builder: (context) =>
-                                                        FootBallMainSubStatsScreens(
-                                                          leagueName: leagueList[index].leagueName.toString(),
-                                                          leagueID: leagueList[index].leagueId.toString(),
-                                                          leagueLogo: leagueList[index].leagueLogo.toString(),
-                                                          leagueCountry: leagueList[index].leagueCountry.toString(),
-                                                        ),
-                                                    )
-                                                );
-                                              },
-                                              icon: const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 18,)
-                                          )
-                                      ),
-                                    ),
-                                  );
-                                    },
-                                  separatorBuilder: (context, index) => Divider(thickness: 0.5,),
+                                  // separatorBuilder: (context, index) => Divider(thickness: 0.5,),
                                   itemCount: leagueList.length,
                                   physics: const BouncingScrollPhysics(),
                                 )

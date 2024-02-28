@@ -68,6 +68,7 @@ class OverViewBody extends StatelessWidget {
                                               response[index]["goals"]["away"].toString(),
                                               response[index]["fixture"]["status"]["short"].toString(),
                                               response[index]["fixture"]["id"].toString(),
+                                              response[index]["league"]["id"].toString(),
                                             )
                                         )
                                     );

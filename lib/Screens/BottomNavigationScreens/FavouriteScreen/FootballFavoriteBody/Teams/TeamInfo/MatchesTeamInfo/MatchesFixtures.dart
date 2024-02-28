@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import '../../../../../DashBoards/MatchesDetailed/MatchDetailes.dart';
 import '../../../../../DashBoards/MatchesOverviewTabBars/MatchesOverviewTabBars.dart';
 
 class MatchesFixtures extends StatelessWidget {
@@ -40,7 +41,7 @@ class MatchesFixtures extends StatelessWidget {
                         const SizedBox(height: 5,),
                         ListTile(
                           horizontalTitleGap: 20,
-                          tileColor: Color(0xff161616),
+                          tileColor: const Color(0xff161616),
                           leading: CircleAvatar(
                             backgroundColor: Colors.transparent,
                             backgroundImage: NetworkImage(
@@ -53,14 +54,23 @@ class MatchesFixtures extends StatelessWidget {
                         const SizedBox(height: 5,),
                         GestureDetector(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => MatchesOverviewTabBars(
-                              isFootball: true,
-                              logo: response[index]["league"]["logo"].toString(),
-                              country: response[index]["country"]["name"].toString(),
-                              name: response[index]["league"]["name"].toString(),
-                              leagueID: response[index]["league"]["id"].toString(),
-                            ),
-                            )
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MatchDetails(
+                                      true,
+                                      response[index]["teams"]["home"]["name"].toString(),
+                                      response[index]["teams"]["home"]["logo"].toString(),
+                                      response[index]["teams"]["away"]["name"].toString(),
+                                      response[index]["teams"]["away"]["logo"].toString(),
+                                      response[index]["goals"]["home"].toString(),
+                                      response[index]["goals"]["away"].toString(),
+                                      response[index]["fixture"]["status"]["short"].toString(),
+                                      response[index]["fixture"]["id"].toString(),
+                                      response[index]["league"]["id"].toString(),
+
+                                    )
+                                )
                             );
                           },
                           child: Container(
@@ -203,7 +213,7 @@ class MatchesFixtures extends StatelessWidget {
     };
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/fixtures?league=39&season=2021')
+        Uri.parse('https://v3.football.api-sports.io/fixtures?date=${DateFormat("yyyy-MM-dd").format(DateTime.now())}')
     );
 
     request.headers.addAll(headers);

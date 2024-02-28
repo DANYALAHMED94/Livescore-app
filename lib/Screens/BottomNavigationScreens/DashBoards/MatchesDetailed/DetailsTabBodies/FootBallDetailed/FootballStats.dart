@@ -6,8 +6,7 @@ import '../../../../../ModelClasses/StatsLinearProgressModel.dart';
 
 class F_Stats extends StatelessWidget {
 
-  String fixtureId;
-  F_Stats({super.key, required this.fixtureId});
+  F_Stats({super.key});
 
   // List<StatsLinearProgressModel> quarter1 = [
   //   StatsLinearProgressModel(0.59, "Field Goals Attempted"),
@@ -50,7 +49,7 @@ class F_Stats extends StatelessWidget {
                 var mapData = jsonDecode(snapshot.data.toString());
                 var response = mapData["response"];
 
-                // return Text(response[0].toString(), style: TextStyle(fontSize: 12, color: Colors.white),);
+                // return Text(snapshot.data.toString(), style: TextStyle(fontSize: 12, color: Colors.white),);
 
                 var statisticsInfo1 = response[0]["statistics"];
                 var statisticsInfo2 = response[1]["statistics"];
@@ -232,7 +231,7 @@ class F_Stats extends StatelessWidget {
             child: LinearProgressIndicator(
               backgroundColor: Colors.white,
               valueColor: AlwaysStoppedAnimation<Color>(const Color(0xff9B8BFF),),
-              value: 0.5,
+              value: 0.2,
             ),
           ),
         ],
@@ -248,9 +247,10 @@ class F_Stats extends StatelessWidget {
       'x-rapidapi-key': apiKey,
       'x-rapidapi-host': 'https://api-football-v1.p.rapidapi.com/v3/fixtures/statistics'
     };
+
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixtureId.toString()}')
+        Uri.parse('https://v3.football.api-sports.io/fixtures/statistics?fixture=215662')
     );
 
     request.headers.addAll(headers);

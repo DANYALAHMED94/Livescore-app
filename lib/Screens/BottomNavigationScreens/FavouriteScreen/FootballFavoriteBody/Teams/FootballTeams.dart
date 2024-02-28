@@ -58,56 +58,104 @@ class FootballTeams extends StatelessWidget {
                       ListTile(
                         horizontalTitleGap: 20,
                         dense: true,
-                        title: Text("Following", style: TextStyle(color: Colors.grey.shade400,
+                        title: Text("Following & Suggested", style: TextStyle(color: Colors.grey.shade400,
                         ),),
                       ),
 
                       SizedBox(
-                        height: mediaQuery.size.height*0.25,
+                        height: mediaQuery.size.height*0.65,
                         child: ListView.builder(itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfoMainScreen(
-                                  "",
-                                  "",
-                                  "",
-                                  ""
-                              ),
-                              )
-                              );
-                            },
-                            child: Container(
-                              width: mediaQuery.size.width,
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 5
-                              ),
-                              decoration: BoxDecoration(
-                                  color: const Color(0xff161616),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              child: Center(
-                                child: ListTile(
-                                    dense: true,
-                                    leading: Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  response[index]["team"]["logo"].toString()
-                                              ),
-                                              fit: BoxFit.fill
-                                          )
+                          if (response[index]["team"]["id"].toString().contains(list[0]["team${index+1}ID"].toString()))
+                          {
+                            return GestureDetector(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfoMainScreen(
+                                    response[index]["team"]["id"].toString(),
+                                    response[index]["team"]["name"].toString(),
+                                    response[index]["team"]["logo"].toString(),
+                                    response[index]["country"]["name"].toString()
+                                ),
+                                )
+                                );
+                              },
+                              child: Container(
+                                width: mediaQuery.size.width,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 5
+                                ),
+                                decoration: BoxDecoration(
+                                    color: const Color(0xff161616),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Center(
+                                  child: ListTile(
+                                      dense: true,
+                                      leading: Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    response[index]["team"]["logo"].toString()
+                                                ),
+                                                fit: BoxFit.fill
+                                            )
+                                        ),
                                       ),
-                                    ),
-                                    minLeadingWidth: 20,
-                                    title: Text(response[index]["team"]["name"].toString(), style: TextStyle(color: Colors.white),),
-                                    trailing: Icon(Icons.notifications, color: const Color(0xff9B8BFF),)
+                                      minLeadingWidth: 20,
+                                      title: Text(response[index]["team"]["name"].toString(), style: TextStyle(color: Colors.white),),
+                                      trailing: Icon(Icons.notifications_active, color: const Color(0xff9B8BFF),)
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
+                            );
+                          }
+                          else{
+                            return GestureDetector(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfoMainScreen(
+                                    response[index]["team"]["id"].toString(),
+                                    response[index]["team"]["name"].toString(),
+                                    response[index]["team"]["logo"].toString(),
+                                    response[index]["country"]["name"].toString()
+                                ),
+                                )
+                                );
+                              },
+                              child: Container(
+                                width: mediaQuery.size.width,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 5
+                                ),
+                                decoration: BoxDecoration(
+                                    color: const Color(0xff161616),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Center(
+                                  child: ListTile(
+                                      dense: true,
+                                      leading: Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    response[index]["team"]["logo"].toString()
+                                                ),
+                                                fit: BoxFit.fill
+                                            )
+                                        ),
+                                      ),
+                                      minLeadingWidth: 20,
+                                      title: Text(response[index]["team"]["name"].toString(), style: TextStyle(color: Colors.white),),
+                                      trailing: const Icon(Icons.notifications_outlined, color: const Color(0xff9B8BFF),)
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
                         },
                           scrollDirection: Axis.vertical,
                           itemExtent: 65,
@@ -116,64 +164,82 @@ class FootballTeams extends StatelessWidget {
                         ),
                       ),
 
-                      ListTile(
-                        horizontalTitleGap: 20,
-                        dense: true,
-                        title: Text("Suggested", style: TextStyle(color: Colors.grey.shade400,
-                        ),),
-                      ),
+                      // ListTile(
+                      //   horizontalTitleGap: 20,
+                      //   dense: true,
+                      //   title: Text("Suggested", style: TextStyle(color: Colors.grey.shade400,
+                      //   ),),
+                      // ),
 
-                      SizedBox(
-                        height: mediaQuery.size.height*0.35,
-                        child: GestureDetector(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfoMainScreen(
-                                "",
-                                "",
-                                "",
-                                ""
-                            ),));
-                          },
-                          child: ListView.builder(itemBuilder: (context, index) {
-                            return Container(
-                              width: mediaQuery.size.width,
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 5
-                              ),
-                              decoration: BoxDecoration(
-                                  color: const Color(0xff161616),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              child: Center(
-                                child: ListTile(
-                                    dense: true,
-                                    leading: Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  response[index]["team"]["logo"].toString()
-                                              ),
-                                              fit: BoxFit.fill
-                                          )
-                                      ),
-                                    ),
-                                    minLeadingWidth: 20,
-                                    title: Text(response[index]["team"]["name"].toString(), style: TextStyle(color: Colors.white),),
-                                    trailing: const Icon(Icons.notifications, color: const Color(0xff9B8BFF))
-                                ),
-                              ),
-                            );
-                          },
-                            scrollDirection: Axis.vertical,
-                            itemExtent: 65,
-                            itemCount: response.length,
-                            physics: BouncingScrollPhysics(),
-                          ),
-                        ),
-                      )
+                      // SizedBox(
+                      //   height: mediaQuery.size.height*0.35,
+                      //   child: GestureDetector(
+                      //     onTap: (){
+                      //       Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfoMainScreen(
+                      //           "",
+                      //           "",
+                      //           "",
+                      //           ""
+                      //       ),));
+                      //     },
+                      //     child: ListView.builder(itemBuilder: (context, index) {
+                      //       if (list[0].toString().contains(response[index]["team"]["id"].toString()))
+                      //       {
+                      //         return const SizedBox();
+                      //       }
+                      //       else {
+                      //         return GestureDetector(
+                      //           onTap: (){
+                      //             Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfoMainScreen(
+                      //                 "",
+                      //                 "",
+                      //                 "",
+                      //                 ""
+                      //             ),
+                      //             )
+                      //             );
+                      //           },
+                      //           child: Container(
+                      //             width: mediaQuery.size.width,
+                      //             margin: const EdgeInsets.symmetric(
+                      //                 horizontal: 20,
+                      //                 vertical: 5
+                      //             ),
+                      //             decoration: BoxDecoration(
+                      //                 color: const Color(0xff161616),
+                      //                 borderRadius: BorderRadius.circular(10)
+                      //             ),
+                      //             child: Center(
+                      //               child: ListTile(
+                      //                   dense: true,
+                      //                   leading: Container(
+                      //                     height: 40,
+                      //                     width: 40,
+                      //                     decoration: BoxDecoration(
+                      //                         image: DecorationImage(
+                      //                             image: NetworkImage(
+                      //                                 response[index]["team"]["logo"].toString()
+                      //                             ),
+                      //                             fit: BoxFit.fill
+                      //                         )
+                      //                     ),
+                      //                   ),
+                      //                   minLeadingWidth: 20,
+                      //                   title: Text(response[index]["team"]["name"].toString(), style: TextStyle(color: Colors.white),),
+                      //                   trailing: Icon(Icons.notifications, color: const Color(0xff9B8BFF),)
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         );
+                      //       }
+                      //     },
+                      //       scrollDirection: Axis.vertical,
+                      //       itemExtent: 65,
+                      //       itemCount: response.length,
+                      //       physics: BouncingScrollPhysics(),
+                      //     ),
+                      //   ),
+                      // )
 
                     ],
                   );
@@ -219,5 +285,4 @@ class FootballTeams extends StatelessWidget {
       return response.reasonPhrase;
     }
   }
-
 }

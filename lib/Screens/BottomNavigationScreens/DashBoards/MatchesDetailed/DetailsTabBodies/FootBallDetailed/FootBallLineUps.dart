@@ -9,11 +9,9 @@ import '../../../../../../Widgets/GroundPlayerItems.dart';
 
 class F_LineUps extends StatelessWidget {
   bool isShowGround;
-  String fixtureId;
-  F_LineUps({super.key, required this.isShowGround, required this.fixtureId});
+  F_LineUps({super.key, required this.isShowGround});
 
   List<Substitute> substitutes1List = [];
-  List<InjuriesModel> injuries1List = [];
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +60,7 @@ class F_LineUps extends StatelessWidget {
                       ),
                       decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage("assets/images/e_ground.png"),
+                              image: AssetImage("assets/images/ground.png"),
                               fit: BoxFit.fill
                           )
                       ),
@@ -331,7 +329,7 @@ class F_LineUps extends StatelessWidget {
 
                         ],
                       ),
-                    ):SizedBox(),
+                    ):const SizedBox(),
                     Container(
                       height: mediaQuery.size.height*0.42,
                       width: mediaQuery.size.width,
@@ -342,7 +340,7 @@ class F_LineUps extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Substitutes",
+                          const Text("Substitutes",
                             style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
@@ -367,78 +365,41 @@ class F_LineUps extends StatelessWidget {
                         ],
                       ),
                     ),
-
-                    FutureBuilder(
-                        future: injuriesInformation(),
-                        builder: (context, snapshot1) {
-                          if(snapshot1.connectionState == ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                backgroundColor: Colors.grey,
+                    Container(
+                      height: mediaQuery.size.height*0.42,
+                      width: mediaQuery.size.width,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 10
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Injuries",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white
+                            ),
+                          ),
+                          Expanded(
+                            child: GridView.builder(
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisExtent: 45
                               ),
-                            );
-                          }
-                          else if(snapshot1.hasData) {
-
-                            // var mapData2 = jsonDecode(snapshot1.data.toString());
-                            // var response2 = mapData2["response"][0];
-
-                            // for(var totalData2 in response2) {
-                            //   substitutes1List.add(
-                            //     Substitute(
-                            //       totalData2["player"]["name"].toString(),
-                            //       totalData2["player"]["number"].toString(),
-                            //       totalData2["player"]["pos"].toString(),
-                            //     ),
-                            //   );
-                            // }
-
-                            // return Text(snapshot1.data.toString(), style: TextStyle(fontSize: 12, color: Colors.white),);
-
-                            return Container(
-                              height: mediaQuery.size.height*0.425,
-                              width: mediaQuery.size.width,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15,
-                                  horizontal: 10
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Injuries",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: GridView.builder(
-                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          mainAxisExtent: 45
-                                      ),
-                                      itemBuilder: (context, index) {
-                                        return lineUpListBuilder(
-                                            substitutes1List[index].playerName.toString(),
-                                            substitutes1List[index].playerNumber.toString());
-                                      },
-                                      itemCount: substitutes1List.length,
-                                      physics: const NeverScrollableScrollPhysics(),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          }
-                          else {
-                            return const Text("Sorry Their is an Server Issue Occurring",
-                              style: TextStyle(fontSize: 12, color: Colors.white),
-                            );
-                          }
-                        },
-                    )
+                              itemBuilder: (context, index) {
+                                return lineUpListBuilder(
+                                    substitutes1List[index].playerName.toString(),
+                                    substitutes1List[index].playerNumber.toString());
+                              },
+                              itemCount: substitutes1List.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -496,7 +457,7 @@ class F_LineUps extends StatelessWidget {
     };
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/fixtures/lineups?fixture=${fixtureId.toString()}')
+        Uri.parse('https://v3.football.api-sports.io/fixtures/lineups?fixture=592872')
     );
 
     request.headers.addAll(headers);
@@ -510,30 +471,4 @@ class F_LineUps extends StatelessWidget {
       return response.reasonPhrase;
     }
   }
-
-  Future injuriesInformation() async{
-
-    const String apiKey = "0a9ce6deb596f61f4e33463c192bd31c";
-
-    var headers = {
-      'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'https://api-football-v1.p.rapidapi.com/v3/injuries'
-    };
-    var request = http.Request(
-        'GET',
-        Uri.parse('https://v3.football.api-sports.io/injuries?fixture=${fixtureId.toString()}')
-    );
-
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      return await response.stream.bytesToString();
-    }
-    else {
-      return response.reasonPhrase;
-    }
-  }
-
 }

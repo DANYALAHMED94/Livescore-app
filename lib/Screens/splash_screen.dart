@@ -35,19 +35,9 @@ class _SplashScreenState extends State<SplashScreen> {
           clipBehavior: Clip.none,
           children: [
             Center(
-              child: RichText(
-                text: const TextSpan(
-                    style: TextStyle(fontFamily: "lucky", fontSize: 38,),
-                    children: [
-                      TextSpan(
-                          text: "BLAZE",
-                          style: TextStyle(color: Color(0xff9B8BFF))
-                      ),
-                      TextSpan(
-                          text: "SCORE"
-                      )
-                    ]
-                ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset("assets/images/splash.png"),
               ),
             ),
             Positioned(

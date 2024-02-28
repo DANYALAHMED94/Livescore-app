@@ -16,16 +16,16 @@ class FootBallDashBoardScreen extends StatefulWidget {
 
   @override
   State<FootBallDashBoardScreen> createState() => _FootBallDashBoardScreenState();
+
 }
 
 class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
 
-  int selectedDateTime=0;
+  int selectedIndex = 0;
 
-  // int selectedImageLevel=0;
+  DateTime? picked;
 
-  List<String> daysOfWeek = [];
-  List<String> monthsAndDates = [];
+  List<DateTime> nextSevenDays = [];
 
   FootballImagesChanger imageUpdater = Get.put(FootballImagesChanger());
 
@@ -41,24 +41,25 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getNextSevenDays();
+    picked = DateTime.now();
     Timer.periodic(const Duration(seconds: 30), (timer) {
       imageUpdater.imageUpdaterFunction();
-    });
+    }
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
-
-    List<String> daysOfWeek = [];
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff0D0D0D),
         actions: [
           IconButton(onPressed: (){
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => FootballSearchIcon(),
+                MaterialPageRoute(
+                  builder: (context) => FootballSearchIcon(),
                 )
             );
           }, icon: const Icon(Icons.search, size: 28, color: Colors.white,)),
@@ -110,7 +111,7 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                   bottom: 10
                 ),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12
+                  horizontal: 12,
                 ),
                 height: mediaQuery.size.height*0.07,
                 width: mediaQuery.size.width,
@@ -119,7 +120,7 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                   children: [
                     GestureDetector(
                       onTap: (){
-                        if(isLive==true){
+                        if(isLive==true) {
                           isLive = false;
                         }
                         else{
@@ -144,13 +145,13 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
-
                               ),
                             ),
                           ],
                         )
                       ),
                     ),
+
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -158,29 +159,32 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                         ),
                         child: ListView.builder(itemBuilder: (context, index) {
 
-                          DateTime currentDate = DateTime.now().add(Duration(days: index));
-                          String formattedDay = DateFormat('E').format(currentDate);
-                          daysOfWeek.add(formattedDay);
+                          // DateTime currentDate = DateTime.now().add(Duration(days: index));
+                          // String formattedDay = DateFormat('E').format(currentDate);
+                          //
+                          // daysOfWeek.add(formattedDay);
 
                           return GestureDetector(
                             onTap: (){
                               setState(() {
-                                selectedDateTime = index;
+                                selectedIndex = index;
+                                picked = nextSevenDays[index];
                               });
                             },
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  daysOfWeek[index].toString(),
+                                DateFormat("E").format(nextSevenDays[index]),
+                                  // daysOfWeek[index].toString(),
                                   style: TextStyle(
                                       fontSize: 15,
-                                      color: selectedDateTime == index?Colors.white:Colors.grey),),
+                                      color: selectedIndex == index?Colors.white:Colors.grey),),
                                 Text(
-                                  "${(int.parse(DateTime.now().day.toString())+index).toString()} ${DateFormat("MMM").format(DateTime.now())}",
+                                  "${DateFormat("dd").format(nextSevenDays[index])} ${DateFormat("MMM").format(DateTime.parse(nextSevenDays[index].toString()))}",
                                   style: TextStyle(
                                       fontSize: 9,
-                                      color: selectedDateTime == index?Colors.white:Colors.grey),
+                                      color: selectedIndex == index?Colors.white:Colors.grey),
                                 ),
                               ],
                             ),
@@ -192,6 +196,8 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                         ),
                       ),
                     ),
+
+
                     IconButton(
                         onPressed: (){
                           _selectDate(context);
@@ -363,8 +369,7 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                           const SizedBox(height: 5,),
                                           GestureDetector(
                                             onTap: (){
-                                              Navigator
-                                                  .push(
+                                              Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) => MatchDetails(
@@ -377,6 +382,8 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                                         response[index]["goals"]["away"].toString(),
                                                         response[index]["fixture"]["status"]["short"].toString(),
                                                         response[index]["fixture"]["id"].toString(),
+                                                        response[index]["league"]["id"].toString(),
+
                                                       )
                                                   )
                                               );
@@ -420,7 +427,7 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                                   subtitle: Text(response[index]["teams"]["away"]["name"].toString(), style: TextStyle(color: Colors.white),),
                                                   trailing: SizedBox(
                                                     height: 50,
-                                                    width: 40,
+                                                    width: 50,
                                                     child: Row(
                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
@@ -561,13 +568,18 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
 
     const String apiKey = "0a9ce6deb596f61f4e33463c192bd31c";
 
+    String url = isLive?
+    "https://v3.football.api-sports.io/fixtures?live=all":
+    "https://v3.football.api-sports.io/fixtures?date=${DateFormat("yyyy-MM-dd").format(DateTime.parse(picked.toString())).toString()}";
+
     var headers = {
       'x-rapidapi-key': apiKey,
       'x-rapidapi-host': 'https://api-football-v1.p.rapidapi.com/v3/fixtures'
     };
+
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/fixtures?league=39&season=2021')
+        Uri.parse(url)
     );
 
     request.headers.addAll(headers);
@@ -583,18 +595,41 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    DateTime? picked = await showDatePicker(
+
+    picked = await showDatePicker(
       context: context,
       initialDatePickerMode: DatePickerMode.year,
       barrierColor: Colors.black.withOpacity(0.8),
       initialDate: DateTime(2011),
       firstDate: DateTime(2011),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2050),
     );
 
     if (picked != null && picked != DateTime.now()) {
-      print('Selected date: $picked');
-      // Do something with the selected date
+      setState(() {
+
+      });
     }
   }
+
+  // dateBuilder(date, maxDates, index) {
+  //   if(date>int.parse(maxDates)) {
+  //     counter = counter+1;
+  //     return counter;
+  //   }
+  //   else {
+  //     return date;
+  //   }
+  // }
+
+  getNextSevenDays() {
+
+    DateTime today = DateTime.now();
+
+    for (int i = 0; i < 7; i++) {
+      nextSevenDays.add(today.add(Duration(days: i)));
+    }
+  }
+
 }
+

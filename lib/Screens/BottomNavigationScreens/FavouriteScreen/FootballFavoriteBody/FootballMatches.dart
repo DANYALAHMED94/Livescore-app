@@ -114,6 +114,7 @@ class FootballMatches extends StatelessWidget {
                                               response[index]["goals"]["away"].toString(),
                                               response[index]["fixture"]["status"]["short"].toString(),
                                               response[index]["fixture"]["id"].toString(),
+                                              response[index]["league"]["id"].toString(),
                                             )
                                         )
                                     );
@@ -157,7 +158,7 @@ class FootballMatches extends StatelessWidget {
                                           subtitle: Text(response[index]["teams"]["away"]["name"].toString(), style: TextStyle(color: Colors.white),),
                                           trailing: SizedBox(
                                             height: 50,
-                                            width: 40,
+                                            width: 50,
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [

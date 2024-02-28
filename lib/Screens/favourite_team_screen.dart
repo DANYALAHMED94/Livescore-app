@@ -33,7 +33,10 @@ class FavouriteTeamScreen extends StatelessWidget {
               const Text(
                 'Pick Your Favourite Teams To Follow',
                 style: TextStyle(
-                    fontSize: 20, color: Color(0xffDADADA), fontFamily: 'lucky'),
+                    fontSize: 20,
+                    color: Color(0xffDADADA),
+                    fontFamily: 'lucky'
+                ),
               ),
               const SizedBox(height: 32),
               SizedBox(
@@ -58,7 +61,8 @@ class FavouriteTeamScreen extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xffCCCCCC)),
+                    color: Color(0xffCCCCCC)
+                ),
               ),
               const SizedBox(height: 16),
 
@@ -86,9 +90,9 @@ class FavouriteTeamScreen extends StatelessWidget {
                               onTap: (){
 
                                 if(favoriteTeamsList.selectedTeamIds.toString().contains(response[index]["team"]["id"].toString()))
-                                  {
-                                    favoriteTeamsList.removeFromFavouriteMethod(response[index]["team"]["id"].toString());
-                                  }
+                                {
+                                  favoriteTeamsList.removeFromFavouriteMethod(response[index]["team"]["id"].toString());
+                                }
                                 else{
                                   favoriteTeamsList.addToFavouriteMethod(response[index]["team"]["id"].toString());
                                 }
@@ -102,7 +106,7 @@ class FavouriteTeamScreen extends StatelessWidget {
                             );
                           },
                           itemCount: 5,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                         ),
                       );
                     }
@@ -113,32 +117,32 @@ class FavouriteTeamScreen extends StatelessWidget {
                     }
                   },
               ),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: const MaterialStatePropertyAll(
+                            Color(0xff9B8BFF),
+                          ),
+                          shape: MaterialStatePropertyAll(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)))),
+                      onPressed: () {
+                        dataTeamIDStorage(context);
+                      },
+                      child: const Text(
+                        'Next',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
-      ),
-
-      bottomNavigationBar: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: const MaterialStatePropertyAll(
-                    Color(0xff9B8BFF),
-                  ),
-                  shape: MaterialStatePropertyAll(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)))),
-              onPressed: () {
-                dataTeamIDStorage(context);
-              },
-              child: const Text(
-                'Next',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -38,6 +38,7 @@ dependencies:
   flutter_swipe_detector: ^2.0.0
   shared_preferences: ^2.2.2
   get: ^4.6.6
+  day_picker: ^2.2.0
   fluttertoast:
   firebase_database:
   firebase_core:

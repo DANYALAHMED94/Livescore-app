@@ -15,7 +15,8 @@ class MatchDetails extends StatefulWidget {
       team1Score,
       team2Score,
       teamsStatus,
-      fixtureId;
+      fixtureId,
+      leagueID;
 
   MatchDetails(
       this.isFootball,
@@ -26,7 +27,8 @@ class MatchDetails extends StatefulWidget {
       this.team1Score,
       this.team2Score,
       this.teamsStatus,
-      this.fixtureId
+      this.fixtureId,
+      this.leagueID
       );
 
   @override
@@ -50,9 +52,9 @@ class _MatchDetailsState extends State<MatchDetails> {
     var mediaQuery = MediaQuery.of(context);
     List<Widget> tabScreensList = [
       F_Summary(),
-      F_Stats(fixtureId: widget.fixtureId),
-      F_LineUps(isShowGround: widget.isFootball, fixtureId: widget.fixtureId,),
-      F_Standing(isShow: true,leagueId: "39"),
+      F_Stats(),
+      F_LineUps(isShowGround: widget.isFootball),
+      F_Standing(isShow: true,leagueId: widget.leagueID),
       const HotPage(),
     ];
     return Scaffold(
@@ -109,7 +111,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                 color: Colors.black,
                 padding: const EdgeInsets.symmetric(
                   vertical: 15,
-                  horizontal: 30,
+                  horizontal: 15,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,7 +154,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                         Text(
                           "${widget.team1Score} - ${widget.team2Score}",
                           style: TextStyle(
-                              fontSize: 28,
+                              fontSize: 20,
                               fontFamily: 'lucky',
                               color: Colors.white),
                         ),
@@ -188,9 +190,10 @@ class _MatchDetailsState extends State<MatchDetails> {
                             widget.team2Name,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16,
-                                color: Colors.white),
+                                color: Colors.white
+                            ),
                           )
                         ],
                       ),

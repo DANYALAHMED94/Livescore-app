@@ -13,13 +13,21 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
 
   FootballLeagueNotificationsIconsReplacer favoriteLeagueList = Get.put(FootballLeagueNotificationsIconsReplacer());
 
-  List<String> leaguesID = [
+  List<String> footballLeaguesID = [
     "2",
     "39",
-    "310",
-    "186",
-    "809"
+    "71",
   ];
+
+  List<String> basketballLeaguesID = [
+    "12",
+  ];
+
+  List<String> tennisLeaguesID = [
+    "",
+  ];
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +84,8 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
                       color: Color(0xffCCCCCC)),
                 ),
                 const SizedBox(height: 16),
-
                 FutureBuilder(
-                  future: leagueInformation(),
+                  future: footballLeagueInformation(),
                   builder: (context, snapshot) {
                     if(snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
@@ -94,34 +101,55 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
                       var response = mapData["response"];
 
                       var filteredResponse = response
-                          .where((item) => leaguesID.contains(item["league"]["id"].toString()))
+                          .where((item) => footballLeaguesID.contains(item["league"]["id"].toString()))
                           .toList();
 
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.45,
-                        child: ListView.builder(
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: (){
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.27,
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: (){
 
-                                if(favoriteLeagueList.selectedTeamIds.toString().contains(filteredResponse[index]["league"]["id"].toString()))
-                                {
-                                  favoriteLeagueList.removeFromFavouriteMethod(filteredResponse[index]["league"]["id"].toString());
-                                }
-                                else{
-                                  favoriteLeagueList.addToFavouriteMethod(filteredResponse[index]["league"]["id"].toString());
-                                }
+                                    if(favoriteLeagueList.selectedTeamIds.toString().contains(filteredResponse[index]["league"]["id"].toString()))
+                                    {
+                                      favoriteLeagueList.removeFromFavouriteMethod(filteredResponse[index]["league"]["id"].toString());
+                                    }
+                                    else{
+                                      favoriteLeagueList.addToFavouriteMethod(filteredResponse[index]["league"]["id"].toString());
+                                    }
+                                  },
+                                  child: favTeamList(
+                                    filteredResponse[index]["league"]["name"].toString(),
+                                    filteredResponse[index]["league"]["logo"].toString(),
+                                    filteredResponse[index]["league"]["id"].toString(),
+                                  ),
+                                );
                               },
-                              child: favTeamList(
-                                filteredResponse[index]["league"]["name"].toString(),
-                                filteredResponse[index]["league"]["logo"].toString(),
-                                filteredResponse[index]["league"]["id"].toString(),
-                              ),
-                            );
-                          },
-                          itemCount: filteredResponse.length,
-                          physics: const BouncingScrollPhysics(),
-                        ),
+                              itemCount: filteredResponse.length,
+                              physics: const BouncingScrollPhysics(),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (){
+
+                              if(favoriteLeagueList.selectedTeamIds.toString().contains("12"))
+                              {
+                                favoriteLeagueList.removeFromFavouriteMethod("12");
+                              }
+                              else{
+                                favoriteLeagueList.addToFavouriteMethod("12");
+                              }
+                            },
+                            child: favTeamList(
+                              "NBA",
+                              "https:\/\/media.api-sports.io\/basketball\/leagues\/12.png",
+                              "12",
+                            ),
+                          ),
+                        ],
                       );
                     }
                     else{
@@ -131,43 +159,41 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
                     }
                   },
                 ),
-
                 const SizedBox(height: 16),
-
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: const MaterialStatePropertyAll(
+                              Color(0xff9B8BFF),
+                            ),
+                            shape: MaterialStatePropertyAll(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                )
+                            )
+                        ),
+                        onPressed: () {
+                          dataLeagueIDStorage(context);
+                        },
+                        child: const Text(
+                          'Save',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: const MaterialStatePropertyAll(
-                    Color(0xff9B8BFF),
-                  ),
-                  shape: MaterialStatePropertyAll(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      )
-                  )
-              ),
-              onPressed: () {
-                dataLeagueIDStorage(context);
-              },
-              child: const Text(
-                'Save',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
-  Future leagueInformation() async{
+  Future footballLeagueInformation() async{
 
     const String apiKey = "0a9ce6deb596f61f4e33463c192bd31c";
 
@@ -189,6 +215,31 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
     }
     else {
       return response.reasonPhrase;
+    }
+  }
+
+  Future basketballLeagueInformation() async{
+
+    const String apiKey = "0a9ce6deb596f61f4e33463c192bd31c";
+
+    var headers = {
+      'x-rapidapi-key': apiKey,
+      'x-rapidapi-host': 'https://api-basketball.p.rapidapi.com/leagues'
+    };
+    var request = http.Request(
+        'GET',
+        Uri.parse('https://v1.basketball.api-sports.io/leagues?id=12')
+    );
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    }
+    else {
+      print(response.reasonPhrase);
     }
   }
 
@@ -223,6 +274,8 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
       ),
     );
   }
+
+
 
   dataLeagueIDStorage(BuildContext context) async{
 

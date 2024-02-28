@@ -34,12 +34,12 @@ class BasketBallTeams extends StatelessWidget {
               ListTile(
                 horizontalTitleGap: 20,
                 dense: true,
-                title: Text("Following", style: TextStyle(color: Colors.grey.shade400,
+                title: Text("Following & Suggestions", style: TextStyle(color: Colors.grey.shade400,
                 ),),
               ),
 
               SizedBox(
-                height: mediaQuery.size.height*0.25,
+                height: mediaQuery.size.height*0.65,
                 child: ListView.builder(itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: (){
@@ -79,7 +79,7 @@ class BasketBallTeams extends StatelessWidget {
                             ),
                             minLeadingWidth: 20,
                             title: Text(response[index]["name"].toString(), style: TextStyle(color: Colors.white),),
-                            trailing: Icon(Icons.notifications, color: const Color(0xff9B8BFF),)
+                            trailing: const Icon(Icons.notifications, color: const Color(0xff9B8BFF),)
                         ),
                       ),
                     ),
@@ -92,64 +92,64 @@ class BasketBallTeams extends StatelessWidget {
                 ),
               ),
 
-              ListTile(
-                horizontalTitleGap: 20,
-                dense: true,
-                title: Text("Suggested", style: TextStyle(color: Colors.grey.shade400,
-                ),),
-              ),
-
-              SizedBox(
-                height: mediaQuery.size.height*0.35,
-                child: GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfoMainScreen(
-                        "",
-                        "",
-                        "",
-                        ""
-                    ),));
-                  },
-                  child: ListView.builder(itemBuilder: (context, index) {
-                    return Container(
-                      width: mediaQuery.size.width,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 5
-                      ),
-                      decoration: BoxDecoration(
-                          color: const Color(0xff161616),
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: Center(
-                        child: ListTile(
-                            dense: true,
-                            leading: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                        response[index]["logo"]
-                                      ),
-                                      fit: BoxFit.fill
-                                  )
-                              ),
-                            ),
-                            minLeadingWidth: 20,
-                            title: Text(response[index]["name"], style: TextStyle(color: Colors.white),),
-                            trailing: const Icon(Icons.notifications, color: const Color(0xff9B8BFF))
-                        ),
-                      ),
-                    );
-                  },
-                    scrollDirection: Axis.vertical,
-                    itemExtent: 65,
-                    itemCount: response.length,
-                    physics: BouncingScrollPhysics(),
-                  ),
-                ),
-              )
+              // ListTile(
+              //   horizontalTitleGap: 20,
+              //   dense: true,
+              //   title: Text("Suggested", style: TextStyle(color: Colors.grey.shade400,
+              //   ),),
+              // ),
+              //
+              // SizedBox(
+              //   height: mediaQuery.size.height*0.35,
+              //   child: GestureDetector(
+              //     onTap: (){
+              //       Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfoMainScreen(
+              //           "",
+              //           "",
+              //           "",
+              //           ""
+              //       ),));
+              //     },
+              //     child: ListView.builder(itemBuilder: (context, index) {
+              //       return Container(
+              //         width: mediaQuery.size.width,
+              //         margin: const EdgeInsets.symmetric(
+              //             horizontal: 20,
+              //             vertical: 5
+              //         ),
+              //         decoration: BoxDecoration(
+              //             color: const Color(0xff161616),
+              //             borderRadius: BorderRadius.circular(10)
+              //         ),
+              //         child: Center(
+              //           child: ListTile(
+              //               dense: true,
+              //               leading: Container(
+              //                 height: 40,
+              //                 width: 40,
+              //                 decoration: BoxDecoration(
+              //                     image: DecorationImage(
+              //                         image: NetworkImage(
+              //                           response[index]["logo"]
+              //                         ),
+              //                         fit: BoxFit.fill
+              //                     )
+              //                 ),
+              //               ),
+              //               minLeadingWidth: 20,
+              //               title: Text(response[index]["name"], style: TextStyle(color: Colors.white),),
+              //               trailing: const Icon(Icons.notifications, color: const Color(0xff9B8BFF))
+              //           ),
+              //         ),
+              //       );
+              //     },
+              //       scrollDirection: Axis.vertical,
+              //       itemExtent: 65,
+              //       itemCount: response.length,
+              //       physics: BouncingScrollPhysics(),
+              //     ),
+              //   ),
+              // )
 
             ],
           );
