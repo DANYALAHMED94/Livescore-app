@@ -67,7 +67,7 @@ class MatchesResults extends StatelessWidget {
                                   response[index]["fixture"]["status"]["short"].toString(),
                                   response[index]["fixture"]["id"].toString(),
                                   response[index]["league"]["id"].toString(),
-
+                                  response[index]["league"]["season"].toString(),
                                 )
                             )
                         );

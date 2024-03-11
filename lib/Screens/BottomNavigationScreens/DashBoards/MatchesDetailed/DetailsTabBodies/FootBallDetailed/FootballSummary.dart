@@ -1,34 +1,17 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import '../../../../../ModelClasses/SubstitudesModel.dart';
-import '../../../../../ModelClasses/SummaryModel.dart';
 import "package:http/http.dart" as http;
 
 class F_Summary extends StatelessWidget {
 
-  F_Summary({super.key});
+  String leagueID;
+  String fixtureID;
+  String season;
+
+  F_Summary({super.key, required this.leagueID, required this.fixtureID, required this.season});
 
   List<Substitute> injuriesList = [];
-
-  //
-  // List<SummaryModel> scoreList = [
-  //   SummaryModel("1", "Yasir", "40"),
-  //   SummaryModel("1", "Ali", "40"),
-  //   SummaryModel("2", "Raza", "50"),
-  //   SummaryModel("2", "Jafar", "60"),
-  //   SummaryModel("1", "Bhola", "40"),
-  // ];
-  //
-  // List<SummaryModel> scoreList2 = [
-  //   SummaryModel("2", "Yasir", "40"),
-  //   SummaryModel("2", "Ali", "40"),
-  //   SummaryModel("2", "Raza", "50"),
-  //   SummaryModel("2", "Jafar", "60"),
-  //   SummaryModel("2", "Bhola", "40"),
-  // ];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +19,7 @@ class F_Summary extends StatelessWidget {
     var mediaQuery = MediaQuery.of(context);
 
     return FutureBuilder(
-      future: injuriesInformation(),
+      future: eventInformation(),
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -55,9 +38,9 @@ class F_Summary extends StatelessWidget {
           for(var totalData in response) {
             injuriesList.add(
               Substitute(
+                totalData["type"].toString(),
                 totalData["player"]["name"].toString(),
-                totalData["player"]["id"].toString(),
-                totalData["player"]["reason"].toString(),
+                totalData["detail"].toString(),
               ),
             );
           }
@@ -70,6 +53,79 @@ class F_Summary extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+
+                    Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        width: mediaQuery.size.width,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          // vertical: 8
+                        ),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5,
+                          horizontal: 15
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+
+                            SizedBox(
+                                width: mediaQuery.size.width*0.25,
+                                child: const Text(
+                                  "Player",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                                )
+                            ),
+                            SizedBox(
+                                width: mediaQuery.size.width*0.25,
+                                child: const Text(
+                                  "Type",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                                )
+                            ),
+                            SizedBox(
+                                width: mediaQuery.size.width*0.25,
+                                child: const Text(
+                                  "Details",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                                )
+                            ),
+                            // SizedBox(
+                            //     width: mediaQuery.size.width*0.25,
+                            //     child: scoreList[index].team=="1"
+                            //         ?Text(scoreList[index].name, textAlign: TextAlign.center,
+                            //       softWrap: true,
+                            //       overflow: TextOverflow.ellipsis,
+                            //       style: TextStyle(color: Colors.white),)
+                            //         :SizedBox()
+                            // ),
+                            // SizedBox(
+                            //   width: mediaQuery.size.width*0.25,
+                            //   child: Text(scoreList[index].score, textAlign: TextAlign.center,
+                            //     softWrap: true,
+                            //     overflow: TextOverflow.ellipsis,
+                            //     style: TextStyle(color: Colors.white),),
+                            // ),
+                            // SizedBox(
+                            //     width: mediaQuery.size.width*0.25,
+                            //     child: scoreList[index].team=="2"
+                            //         ?Text(scoreList[index].name, textAlign: TextAlign.center,
+                            //       softWrap: true,
+                            //       overflow: TextOverflow.ellipsis,
+                            //       style: TextStyle(color: Colors.white),)
+                            //         :SizedBox()
+                            // )
+                          ],
+                        )
+                    ),
+
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15,
@@ -100,6 +156,7 @@ class F_Summary extends StatelessWidget {
                                     width: mediaQuery.size.width*0.25,
                                       child: Text(
                                         injuriesList[index].playerNumber.toString(),
+                                        textAlign: TextAlign.center,
                                         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
                                       )
                                   ),
@@ -107,6 +164,7 @@ class F_Summary extends StatelessWidget {
                                       width: mediaQuery.size.width*0.25,
                                       child: Text(
                                         injuriesList[index].playerName.toString(),
+                                        textAlign: TextAlign.center,
                                         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
                                       )
                                   ),
@@ -114,6 +172,7 @@ class F_Summary extends StatelessWidget {
                                       width: mediaQuery.size.width*0.25,
                                       child: Text(
                                         injuriesList[index].playerPosition.toString(),
+                                        textAlign: TextAlign.center,
                                         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
                                       )
                                   ),
@@ -286,17 +345,17 @@ class F_Summary extends StatelessWidget {
     );
   }
 
-  Future injuriesInformation() async{
+  Future eventInformation() async{
 
     const String apiKey = "0a9ce6deb596f61f4e33463c192bd31c";
 
     var headers = {
       'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': 'https://api-football-v1.p.rapidapi.com/v3/injuries'
+      'x-rapidapi-host': 'https://api-football-v1.p.rapidapi.com/v3/fixtures/events'
     };
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/injuries?league=39&season=2022')
+        Uri.parse('https://v3.football.api-sports.io/fixtures/events?fixture=${fixtureID.toString()}')
     );
 
     request.headers.addAll(headers);

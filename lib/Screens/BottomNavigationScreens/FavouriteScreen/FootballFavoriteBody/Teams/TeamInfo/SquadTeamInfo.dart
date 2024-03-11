@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../../../../ModelClasses/SquadModel.dart';
@@ -121,12 +122,13 @@ class SquadTeamInfo extends StatelessWidget {
                                 width: mediaQuery.size.width*0.5,
                                 child: Row(
                                   children: [
-                                    Text("${squadList[index].name.toString()}\t"
-                                        "(${squadList[index].position.toString()})",
-                                      softWrap: true,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(color: Colors.white, fontSize: 12),),
+                                    Expanded(
+                                      child: Text("${squadList[index].name.toString()}\t"
+                                          "(${squadList[index].position.toString()})",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(color: Colors.white, fontSize: 12),),
+                                    ),
                                     // Container(
                                     //   height: 20,
                                     //   width: 30,

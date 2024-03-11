@@ -62,7 +62,8 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                   builder: (context) => FootballSearchIcon(),
                 )
             );
-          }, icon: const Icon(Icons.search, size: 28, color: Colors.white,)),
+          },
+              icon: const Icon(Icons.search, size: 28, color: Colors.white,)),
           Padding(
             padding: const EdgeInsets.only(
                 right: 8
@@ -84,7 +85,9 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                    const MatchesMenusSelector()));
+                    const MatchesMenusSelector()
+                )
+            );
           },
           child: const Padding(
             padding: EdgeInsets.all(8.0),
@@ -330,7 +333,7 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                 //
                                 // ),
                                 SizedBox(
-                                  height: mediaQuery.size.height*0.5,
+                                  height: mediaQuery.size.height*0.53,
                                   width: mediaQuery.size.width,
                                   child: ListView.builder(
                                     itemBuilder: (context, index) {
@@ -369,6 +372,9 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                           const SizedBox(height: 5,),
                                           GestureDetector(
                                             onTap: (){
+
+                                              print("Season Online = ${response[index]["league"]["season"].toString()}");
+
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -383,7 +389,7 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                                         response[index]["fixture"]["status"]["short"].toString(),
                                                         response[index]["fixture"]["id"].toString(),
                                                         response[index]["league"]["id"].toString(),
-
+                                                        response[index]["league"]["season"].toString(),
                                                       )
                                                   )
                                               );
@@ -410,7 +416,10 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                                         Column(
                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                           children: [
-                                                            Text(DateFormat("HH:mm a").format(DateTime.parse(response[index]["fixture"]["date"].toString())), style: TextStyle(color:  Color(0xff9B8BFF)),),
+
+                                                            // Timer Display
+
+                                                            Text(DateFormat("mm:ss").format(DateTime.parse(response[index]["fixture"]["date"].toString())), style: TextStyle(color:  Color(0xff9B8BFF)),),
                                                             Text(response[index]["fixture"]["status"]["short"].toString(), style: TextStyle(color: Color(0xff9B8BFF)),),
                                                           ],
                                                         ),
@@ -428,7 +437,14 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                                   trailing: SizedBox(
                                                     height: 50,
                                                     width: 50,
-                                                    child: Row(
+                                                    child: response[index]["goals"]["home"].toString()=="null"?
+                                                    const Center(
+                                                        child: Text(
+                                                          "Coming Soon",
+                                                          style: TextStyle(fontSize: 12, color: Colors.white),
+                                                        )
+                                                    ):
+                                                    Row(
                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
                                                         Column(
@@ -519,8 +535,9 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
                                         ],
                                       );
                                     },
+                                    reverse: false,
                                     itemCount: response.length,
-                                    physics: BouncingScrollPhysics(),
+                                    physics: const BouncingScrollPhysics(),
                                   ),
                                 ),
                               ],
@@ -569,7 +586,7 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
     const String apiKey = "0a9ce6deb596f61f4e33463c192bd31c";
 
     String url = isLive?
-    "https://v3.football.api-sports.io/fixtures?live=all":
+    "https://v3.football.api-sports.io/fixtures?live=all&season=${DateFormat("yyyy").format(DateTime.parse(picked.toString())).toString()}":
     "https://v3.football.api-sports.io/fixtures?date=${DateFormat("yyyy-MM-dd").format(DateTime.parse(picked.toString())).toString()}";
 
     var headers = {
@@ -611,16 +628,6 @@ class _FootBallDashBoardScreenState extends State<FootBallDashBoardScreen> {
       });
     }
   }
-
-  // dateBuilder(date, maxDates, index) {
-  //   if(date>int.parse(maxDates)) {
-  //     counter = counter+1;
-  //     return counter;
-  //   }
-  //   else {
-  //     return date;
-  //   }
-  // }
 
   getNextSevenDays() {
 

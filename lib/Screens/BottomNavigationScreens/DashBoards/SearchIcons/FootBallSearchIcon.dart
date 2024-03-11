@@ -15,8 +15,6 @@ class _FootballSearchIconState extends State<FootballSearchIcon> {
 
   String searchText = "";
 
-  List<SquadModel> squadList = [];
-
   // @override
   // void initState() {
   //   // TODO: implement initState

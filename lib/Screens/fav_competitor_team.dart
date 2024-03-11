@@ -17,6 +17,7 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
     "2",
     "39",
     "71",
+    "140",
   ];
 
   List<String> basketballLeaguesID = [
@@ -107,7 +108,7 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
                       return Column(
                         children: [
                           SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.27,
+                            height: MediaQuery.of(context).size.height * 0.355,
                             child: ListView.builder(
                               itemBuilder: (context, index) {
                                 return GestureDetector(
@@ -129,7 +130,7 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
                                 );
                               },
                               itemCount: filteredResponse.length,
-                              physics: const BouncingScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                             ),
                           ),
                           GestureDetector(
@@ -280,6 +281,8 @@ class FavouriteCompetitorTeamScreen extends StatelessWidget {
   dataLeagueIDStorage(BuildContext context) async{
 
     DatabaseReference ref = FirebaseDatabase.instance.ref("1").child("favoriteLeagueList");
+
+
 
     await ref.set({
       "League1ID": favoriteLeagueList.selectedTeamIds.length > 0 ? (favoriteLeagueList.selectedTeamIds[0]?.toString()?.isEmpty ?? true) ? "" : favoriteLeagueList.selectedTeamIds[0]?.toString() : "",

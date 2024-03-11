@@ -16,7 +16,8 @@ class MatchDetails extends StatefulWidget {
       team2Score,
       teamsStatus,
       fixtureId,
-      leagueID;
+      leagueID,
+      seasonID;
 
   MatchDetails(
       this.isFootball,
@@ -28,7 +29,8 @@ class MatchDetails extends StatefulWidget {
       this.team2Score,
       this.teamsStatus,
       this.fixtureId,
-      this.leagueID
+      this.leagueID,
+      this.seasonID
       );
 
   @override
@@ -51,9 +53,9 @@ class _MatchDetailsState extends State<MatchDetails> {
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
     List<Widget> tabScreensList = [
-      F_Summary(),
-      F_Stats(),
-      F_LineUps(isShowGround: widget.isFootball),
+      F_Summary(fixtureID: widget.fixtureId, leagueID: widget.leagueID, season: widget.seasonID,),
+      F_Stats(fixtureId: widget.fixtureId,),
+      F_LineUps(isShowGround: widget.isFootball, fixtureId: widget.fixtureId,),
       F_Standing(isShow: true,leagueId: widget.leagueID),
       const HotPage(),
     ];

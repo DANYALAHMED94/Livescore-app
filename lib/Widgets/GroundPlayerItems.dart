@@ -26,7 +26,7 @@ class GroundPlayerItems extends StatelessWidget {
             child: Center(
               child: Text(value.toString(),
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 12,
                     color: isWhite?Colors.white:Colors.black,
                     fontWeight: FontWeight.w500
                 ),
@@ -35,8 +35,9 @@ class GroundPlayerItems extends StatelessWidget {
           ),
           Text(
             name,
+            overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),)
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 10),)
         ],
       ),
     );

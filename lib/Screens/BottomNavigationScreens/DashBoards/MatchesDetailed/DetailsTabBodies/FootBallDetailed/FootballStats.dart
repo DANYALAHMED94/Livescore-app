@@ -6,7 +6,9 @@ import '../../../../../ModelClasses/StatsLinearProgressModel.dart';
 
 class F_Stats extends StatelessWidget {
 
-  F_Stats({super.key});
+  String fixtureId;
+
+  F_Stats({super.key, required this.fixtureId});
 
   // List<StatsLinearProgressModel> quarter1 = [
   //   StatsLinearProgressModel(0.59, "Field Goals Attempted"),
@@ -34,139 +36,86 @@ class F_Stats extends StatelessWidget {
         width: mediaQuery.size.width,
         height: mediaQuery.size.height*1.8,
         child: FutureBuilder(
-            future: statisticsInformation(),
-            builder: (context, snapshot) {
-              if(snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    backgroundColor: Colors.grey,
-                  ),
-                );
-              }
-              else if(snapshot.hasData) {
+          future: statisticsInformation(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  backgroundColor: Colors.grey,
+                ),
+              );
+            } else if (snapshot.hasData) {
+              var mapData = jsonDecode(snapshot.data.toString());
+              var response = mapData["response"];
 
-                var mapData = jsonDecode(snapshot.data.toString());
-                var response = mapData["response"];
-
-                // return Text(snapshot.data.toString(), style: TextStyle(fontSize: 12, color: Colors.white),);
-
+              if (response != null && response is List && response.isNotEmpty) {
                 var statisticsInfo1 = response[0]["statistics"];
                 var statisticsInfo2 = response[1]["statistics"];
 
-                for(var statsInfo in statisticsInfo1) {
-                  statisticsList1
-                      .add(
-                      FootballStatistics(
-                          statsInfo["value"].toString(),
-                          statsInfo["type"].toString()
-                      )
+                for (var statsInfo in statisticsInfo1) {
+                  statisticsList1.add(
+                    FootballStatistics(
+                      statsInfo["value"].toString(),
+                      statsInfo["type"].toString(),
+                    ),
                   );
                 }
 
-                for(var statsInfo in statisticsInfo2) {
-                  statisticsList2
-                      .add(
-                      FootballStatistics(
-                          statsInfo["value"].toString(),
-                          statsInfo["type"].toString()
-                      )
+                for (var statsInfo in statisticsInfo2) {
+                  statisticsList2.add(
+                    FootballStatistics(
+                      statsInfo["value"].toString(),
+                      statsInfo["type"].toString(),
+                    ),
                   );
                 }
-
 
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Audio Commentary", style: TextStyle(
-                                color: Colors.white,
-                              ),),
-                              SizedBox(width: 10,),
-                              Icon(Icons.multitrack_audio, size: 25,color: Colors.white,),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                    // Your existing code here...
+
                     SizedBox(
-                      height: mediaQuery.size.height*1.5,
-                        width: mediaQuery.size.width,
-                        child: ListView.builder(itemBuilder: (context, index) {
+                      height: mediaQuery.size.height * 1.5,
+                      width: mediaQuery.size.width,
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
                           return linearProgressContainerBuilder(
-                              statisticsList1[index].value.toString(),
-                              statisticsList2[index].value.toString(),
-                              statisticsList2[index].type.toString(),
+                            statisticsList1[index].value.toString(),
+                            statisticsList2[index].value.toString(),
+                            statisticsList2[index].type.toString(),
                           );
                         },
-                          itemCount: statisticsList1.length,
-                          physics: NeverScrollableScrollPhysics(),
-                        )),
-                    // const Text("2st Quarter", style: TextStyle(
-                    //     color: Colors.white,
-                    //     fontSize: 16
-                    // ),),
-                    // SizedBox(
-                    //     height: mediaQuery.size.height*0.8,
-                    //     child: ListView.builder(itemBuilder: (context, index) {
-                    //       return linearProgressContainerBuilder(index);
-                    //     },
-                    //       itemCount: quarter1.length,
-                    //       physics: NeverScrollableScrollPhysics(),
-                    //     )),
-                    // const Text("3st Quarter", style: TextStyle(
-                    //     color: Colors.white,
-                    //     fontSize: 16
-                    // ),),
-                    // SizedBox(
-                    //     height: mediaQuery.size.height*0.8,
-                    //     child: ListView.builder(itemBuilder: (context, index) {
-                    //       return linearProgressContainerBuilder(index);
-                    //     },
-                    //       itemCount: quarter1.length,
-                    //       physics: NeverScrollableScrollPhysics(),
-                    //     )),
-                    // const Text("4st Quarter", style: TextStyle(
-                    //     color: Colors.white,
-                    //     fontSize: 16
-                    // ),),
-                    // SizedBox(
-                    //     height: mediaQuery.size.height*0.8,
-                    //     child: ListView.builder(itemBuilder: (context, index) {
-                    //       return linearProgressContainerBuilder(index);
-                    //     },
-                    //       itemCount: quarter1.length,
-                    //       physics: NeverScrollableScrollPhysics(),
-                    //     )),
-                    // const Text("5st Quarter", style: TextStyle(
-                    //     color: Colors.white,
-                    //     fontSize: 16
-                    // ),),
-                    // SizedBox(
-                    //     height: mediaQuery.size.height*0.8,
-                    //     child: ListView.builder(itemBuilder: (context, index) {
-                    //       return linearProgressContainerBuilder(index);
-                    //     },
-                    //       itemCount: quarter1.length,
-                    //       physics: NeverScrollableScrollPhysics(),
-                    //     )),
+                        itemCount: statisticsList1.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                      ),
+                    ),
+
+                    // Your existing code here...
                   ],
                 );
               }
-              else{
-                return const Text("Sorry Their is an Server Issue Occurring",
-                  style: TextStyle(fontSize: 12, color: Colors.white),
+              else {
+                return Container(
+                  margin: EdgeInsets.only(
+                    left: mediaQuery.size.width*0.28,
+                    top: mediaQuery.size.height*0.2
+                  ),
+                  child: const Text(
+                    "No data available.",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
                 );
               }
-            },
+            } else {
+              return const Text(
+                "Sorry, there is a server issue occurring",
+                style: TextStyle(fontSize: 12, color: Colors.white),
+              );
+            }
+          },
         ),
       ),
     );
@@ -228,7 +177,7 @@ class F_Stats extends StatelessWidget {
             ),
             height: 5,
             width: double.infinity,
-            child: LinearProgressIndicator(
+            child: const LinearProgressIndicator(
               backgroundColor: Colors.white,
               valueColor: AlwaysStoppedAnimation<Color>(const Color(0xff9B8BFF),),
               value: 0.2,
@@ -248,9 +197,11 @@ class F_Stats extends StatelessWidget {
       'x-rapidapi-host': 'https://api-football-v1.p.rapidapi.com/v3/fixtures/statistics'
     };
 
+    print(fixtureId.toString());
+
     var request = http.Request(
         'GET',
-        Uri.parse('https://v3.football.api-sports.io/fixtures/statistics?fixture=215662')
+        Uri.parse('https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixtureId.toString()}')
     );
 
     request.headers.addAll(headers);
@@ -264,5 +215,6 @@ class F_Stats extends StatelessWidget {
       return response.reasonPhrase;
     }
   }
+
 
 }

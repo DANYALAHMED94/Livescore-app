@@ -46,209 +46,221 @@ class _F_StandingState extends State<F_Standing> {
 
             var mapData = jsonDecode(snapshot.data.toString());
             var response = mapData["response"];
-            var standingInfo = response[0]["league"]["standings"][0];
 
-            // return Text(standingInfo.toString(), style: TextStyle(fontSize: 12, color: Colors.white),);
-
-            return SingleChildScrollView(
-              child: SizedBox(
-                height: mediaQuery.size.height*1.245,
-                width: mediaQuery.size.width,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          widget.isShow==true?SizedBox(
-                            width: mediaQuery.size.width*0.42,
-                            height: 50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SizedBox(
-                                  height: 50,
-                                  width: mediaQuery.size.width*0.42,
-                                  child: ListView.builder(itemBuilder: (context, index) {
-                                    return Container(
-                                      height: 30,
-                                      width: 40,
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 5,
-                                          vertical: 5
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 3,
-                                        vertical: 3,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: selectedMain == index? const Color(0xff9B8BFF): Colors.black,
-                                        borderRadius: BorderRadius.circular(8),
-                                        // border: Border(
-                                        //   bottom: BorderSide(
-                                        //     color: Colors.grey.shade300,
-                                        //     width: 2,
-                                        //     style: BorderStyle.solid
-                                        //   )
-                                        // )
-                                      ),
-                                      child: Center(
-                                          child: Text(mainList[index],
-                                            style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w900,
-                                                color: Colors.white
-                                            ),
-                                          )
-                                      ),
-                                    );
-                                  },
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: mainList.length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ):SizedBox(width: mediaQuery.size.width*0.42, height: 50,),
-                          SizedBox(
-                            width: mediaQuery.size.width*0.22,
-                          ),
-                          SizedBox(
-                            width: mediaQuery.size.width*0.3,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SizedBox(
+            if(response != null && response is List && response.isNotEmpty){
+              var standingInfo = response[0]["league"]["standings"][0];
+              return SingleChildScrollView(
+                child: SizedBox(
+                  height: mediaQuery.size.height*1.245,
+                  width: mediaQuery.size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            widget.isShow==true?SizedBox(
+                              width: mediaQuery.size.width*0.42,
+                              height: 50,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SizedBox(
                                     height: 50,
-                                    width: mediaQuery.size.width*0.3,
+                                    width: mediaQuery.size.width*0.42,
                                     child: ListView.builder(itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                        onTap: (){
-                                          setState(() {
-                                            selectedSub = index;
-                                          });
-                                        },
-                                        child: Container(
-                                          height: 30,
-                                          width: 40,
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 5,
-                                              vertical: 5
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 3,
-                                            vertical: 3,
-                                          ),
-                                          decoration: BoxDecoration(
-                                              color: selectedSub == index? const Color(0xff9B8BFF): Colors.black,
-                                              borderRadius: BorderRadius.circular(8)
-                                          ),
-                                          child: Center(
-                                              child: Text(mainSubList[index],
-                                                style: const TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w900,
-                                                    color: Colors.white
-                                                ),
-                                              )
-                                          ),
+                                      return Container(
+                                        height: 30,
+                                        width: 40,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 5,
+                                            vertical: 5
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 3,
+                                          vertical: 3,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: selectedMain == index? const Color(0xff9B8BFF): Colors.black,
+                                          borderRadius: BorderRadius.circular(8),
+                                          // border: Border(
+                                          //   bottom: BorderSide(
+                                          //     color: Colors.grey.shade300,
+                                          //     width: 2,
+                                          //     style: BorderStyle.solid
+                                          //   )
+                                          // )
+                                        ),
+                                        child: Center(
+                                            child: Text(mainList[index],
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w900,
+                                                  color: Colors.white
+                                              ),
+                                            )
                                         ),
                                       );
                                     },
-                                      itemCount: mainSubList.length,
                                       scrollDirection: Axis.horizontal,
+                                      itemCount: mainList.length,
                                       physics: NeverScrollableScrollPhysics(),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ):SizedBox(width: mediaQuery.size.width*0.42, height: 50,),
+                            SizedBox(
+                              width: mediaQuery.size.width*0.22,
+                            ),
+                            SizedBox(
+                              width: mediaQuery.size.width*0.3,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SizedBox(
+                                      height: 50,
+                                      width: mediaQuery.size.width*0.3,
+                                      child: ListView.builder(itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: (){
+                                            setState(() {
+                                              selectedSub = index;
+                                            });
+                                          },
+                                          child: Container(
+                                            height: 30,
+                                            width: 40,
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 5,
+                                                vertical: 5
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 3,
+                                              vertical: 3,
+                                            ),
+                                            decoration: BoxDecoration(
+                                                color: selectedSub == index? const Color(0xff9B8BFF): Colors.black,
+                                                borderRadius: BorderRadius.circular(8)
+                                            ),
+                                            child: Center(
+                                                child: Text(mainSubList[index],
+                                                  style: const TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.w900,
+                                                      color: Colors.white
+                                                  ),
+                                                )
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                        itemCount: mainSubList.length,
+                                        scrollDirection: Axis.horizontal,
+                                        physics: NeverScrollableScrollPhysics(),
+                                      )
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            selectedSub == 0?Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.grey.shade300,
+                                        width: 1
                                     )
-                                )
-                              ],
+                                ),
+                              ),
+                              child: ListTile(
+                                dense: true,
+                                title: const Text("Teams", style: TextStyle(color: Colors.white,fontSize: 15),),
+                                leading: const Text("#", style: TextStyle(color: Colors.white, fontSize: 15),),
+                                minLeadingWidth: 10,
+                                trailing: SizedBox(
+                                  width: mediaQuery.size.width*0.05,
+                                  child: const Text("F", style: TextStyle(color: Colors.white,fontSize: 15),),
+                                ),
+                              ),
+                            ):Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.grey.shade300,
+                                        width: 1
+                                    )
+                                ),
+                              ),
+                              child: ListTile(
+                                dense: true,
+                                title: const Text("Teams", style: TextStyle(color: Colors.white,fontSize: 15),),
+                                leading: const Text("#", style: TextStyle(color: Colors.white, fontSize: 15),),
+                                minLeadingWidth: 10,
+                                trailing: SizedBox(
+                                    width: mediaQuery.size.width*0.3,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text("P", style: TextStyle(color: Colors.white,fontSize: 15),),
+                                        const Text("GD", style: TextStyle(color: Colors.white,fontSize: 15),),
+                                        const Text("PTS", style: TextStyle(color: Colors.white,fontSize: 15),),
+                                      ],
+                                    )
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                            SizedBox(
+                              height: mediaQuery.size.height*1.1,
+                              child: ListView.builder(itemBuilder: (context, index) {
+                                return tabCards(
+                                  index,
+                                  context,
+                                  standingInfo[index]["team"]["name"].toString(),
+                                  standingInfo[index]["team"]["logo"].toString(),
+                                  standingInfo[index]["points"].toString(),
+                                  standingInfo[index]["goalsDiff"].toString(),
+                                  standingInfo[index]["rank"].toString(),
+                                  standingInfo[index]["form"].toString(),
 
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          selectedSub == 0?Container(
-                            decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      color: Colors.grey.shade300,
-                                      width: 1
-                                  )
+                                );
+                              },
+                                itemCount: standingInfo.length,
+                                itemExtent: 50,
+                                physics: NeverScrollableScrollPhysics(),
                               ),
-                            ),
-                            child: ListTile(
-                              dense: true,
-                              title: const Text("Teams", style: TextStyle(color: Colors.white,fontSize: 15),),
-                              leading: const Text("#", style: TextStyle(color: Colors.white, fontSize: 15),),
-                              minLeadingWidth: 10,
-                              trailing: SizedBox(
-                                width: mediaQuery.size.width*0.05,
-                                child: const Text("F", style: TextStyle(color: Colors.white,fontSize: 15),),
-                              ),
-                            ),
-                          ):Container(
-                            decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      color: Colors.grey.shade300,
-                                      width: 1
-                                  )
-                              ),
-                            ),
-                            child: ListTile(
-                              dense: true,
-                              title: const Text("Teams", style: TextStyle(color: Colors.white,fontSize: 15),),
-                              leading: const Text("#", style: TextStyle(color: Colors.white, fontSize: 15),),
-                              minLeadingWidth: 10,
-                              trailing: SizedBox(
-                                  width: mediaQuery.size.width*0.3,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text("P", style: TextStyle(color: Colors.white,fontSize: 15),),
-                                      const Text("GD", style: TextStyle(color: Colors.white,fontSize: 15),),
-                                      const Text("PTS", style: TextStyle(color: Colors.white,fontSize: 15),),
-                                    ],
-                                  )
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: mediaQuery.size.height*1.1,
-                            child: ListView.builder(itemBuilder: (context, index) {
-                              return tabCards(
-                                index,
-                                context,
-                                standingInfo[index]["team"]["name"].toString(),
-                                standingInfo[index]["team"]["logo"].toString(),
-                                standingInfo[index]["points"].toString(),
-                                standingInfo[index]["goalsDiff"].toString(),
-                                standingInfo[index]["rank"].toString(),
-                                standingInfo[index]["form"].toString(),
-
-                              );
-                            },
-                              itemCount: standingInfo.length,
-                              itemExtent: 50,
-                              physics: NeverScrollableScrollPhysics(),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
+              );
+            }
+            else{
+              return Container(
+                margin: EdgeInsets.only(
+                    left: mediaQuery.size.width*0.28,
+                    top: mediaQuery.size.height*0.2
+                ),
+                child: const Text(
+                  "No data found yet.",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              );
+            }
           }
           else {
             return const Text("Sorry Their is an Server Issue Occurring",
